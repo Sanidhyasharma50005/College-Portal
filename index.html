@@ -1,0 +1,1882 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>MITS Portal — Student &amp; Faculty</title>
+<style>
+:root{
+  --ink:#0d2b21; --ink2:#123a2c; --pine:#14532d; --moss:#1d6a44;
+  --amber:#e8930c; --amber2:#f5a623; --amber-soft:#fdf0d5;
+  --bg:#f6f4ec; --bg2:#efece0; --card:#fffdf7; --card2:#fbf9f1;
+  --line:#e2ddcb; --line2:#d4cfb8;
+  --text:#17251f; --muted:#5c6b62; --faint:#8a968d;
+  --good:#177245; --good-bg:#e2f3e8; --bad:#b3372a; --bad-bg:#fbe7e3;
+  --warn:#9a6206; --warn-bg:#fdf0d5; --info:#1d5fa8; --info-bg:#e3eefb;
+  --shadow:0 1px 2px rgba(13,43,33,.06),0 8px 24px -12px rgba(13,43,33,.18);
+  --shadow-lg:0 2px 4px rgba(13,43,33,.08),0 20px 44px -16px rgba(13,43,33,.28);
+  --r:14px; --r-sm:10px;
+  --font:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --display:Georgia,"Times New Roman",serif;
+}
+[data-theme="dark"]{
+  --ink:#081a13; --ink2:#0d2b21; --pine:#1d6a44; --moss:#2b8a5c;
+  --amber:#f5a623; --amber2:#ffb63d; --amber-soft:#3a2c10;
+  --bg:#0a120e; --bg2:#0e1a14; --card:#122019; --card2:#16261d;
+  --line:#22392d; --line2:#2d4a3a;
+  --text:#e8efe9; --muted:#a3b5a9; --faint:#728a7b;
+  --good:#4cc38a; --good-bg:#123527; --bad:#ff8a7a; --bad-bg:#3d1a14;
+  --warn:#f5bc55; --warn-bg:#3a2c10; --info:#7ab3f0; --info-bg:#14293f;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  --shadow-lg:0 2px 4px rgba(0,0,0,.5),0 20px 44px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:.95rem;color:var(--text)}
+a{color:var(--moss)}
+h1,h2,h3,h4{margin:0;line-height:1.2}
+.num{font-variant-numeric:tabular-nums lining-nums}
+.hidden{display:none!important}
+
+/* ---------- buttons / chips / badges ---------- */
+.btn{display:inline-flex;align-items:center;gap:.45rem;border:1px solid var(--line2);background:var(--card);color:var(--text);
+  padding:.5rem 1rem;border-radius:999px;font-weight:600;font-size:.9rem;transition:.15s;text-decoration:none;justify-content:center}
+.btn:hover{border-color:var(--moss);transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:#fdf8ec;border-color:var(--ink)}
+[data-theme="dark"] .btn.primary{background:var(--amber);color:#1c1305;border-color:var(--amber)}
+.btn.primary:hover{filter:brightness(1.15)}
+.btn.amber{background:var(--amber);border-color:var(--amber);color:#221503}
+.btn.amber:hover{background:var(--amber2)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:.3rem .75rem;font-size:.82rem;min-height:2rem}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.chip{display:inline-flex;align-items:center;gap:.3rem;padding:.14rem .6rem;border-radius:999px;font-size:.74rem;font-weight:700;letter-spacing:.02em;background:var(--bg2);color:var(--muted);border:1px solid var(--line)}
+.chip.amber{background:var(--amber-soft);color:var(--warn);border-color:transparent}
+.chip.green{background:var(--good-bg);color:var(--good);border-color:transparent}
+.chip.red{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.chip.blue{background:var(--info-bg);color:var(--info);border-color:transparent}
+.badge-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--bad);vertical-align:top}
+.pill-tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.pill-tabs button{border:1px solid var(--line2);background:var(--card);border-radius:999px;padding:.35rem .9rem;font-weight:600;font-size:.86rem;color:var(--muted)}
+.pill-tabs button.on{background:var(--ink);color:#fdf8ec;border-color:var(--ink)}
+[data-theme="dark"] .pill-tabs button.on{background:var(--amber);color:#1c1305;border-color:var(--amber)}
+
+/* ---------- login ---------- */
+#loginView{min-height:100vh;display:flex;flex-direction:column;background:
+  radial-gradient(1100px 500px at 85% -10%,rgba(232,147,12,.20),transparent 60%),
+  radial-gradient(900px 600px at -10% 110%,rgba(29,106,68,.28),transparent 55%),var(--ink)}
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;width:100%}
+.login-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;max-width:1020px;width:100%;align-items:center}
+.login-hero{color:#f3efe0}
+.login-hero .crest{width:58px;height:58px;border-radius:16px;background:var(--amber);color:#221503;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.5rem;box-shadow:var(--shadow-lg)}
+.login-hero h1{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.1rem);font-weight:700;margin:1.1rem 0 .6rem;color:#fdf8ec}
+.login-hero h1 em{color:var(--amber2);font-style:normal}
+.login-hero p{color:#c9d4c6;max-width:46ch;font-size:1.02rem}
+.login-feats{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.6rem;max-width:520px}
+.login-feats div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);padding:.7rem .85rem;font-size:.88rem;color:#e7e2cf}
+.login-feats b{display:block;color:#fdf8ec;font-size:.95rem}
+.login-card{background:var(--card);border-radius:20px;box-shadow:var(--shadow-lg);padding:1.8rem;border:1px solid var(--line)}
+.login-card h2{font-size:1.3rem}
+.login-card .sub{color:var(--muted);font-size:.9rem;margin:.3rem 0 1.2rem}
+.gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:.6rem;background:#fff;color:#1f1f1f;border:1px solid #dadce0;border-radius:999px;padding:.65rem 1rem;font-weight:600;font-size:.95rem;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.gbtn:hover{background:#f6f9fe}
+.gmark{width:20px;height:20px;flex:none}
+.or{display:flex;align-items:center;gap:.8rem;color:var(--faint);font-size:.78rem;font-weight:700;letter-spacing:.08em;margin:1.1rem 0}
+.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.field{margin-bottom:.85rem}
+.field label{display:block;font-size:.8rem;font-weight:700;color:var(--muted);margin-bottom:.3rem;letter-spacing:.02em}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line2);border-radius:var(--r-sm);padding:.55rem .75rem;background:var(--card);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+.demo-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.4rem}
+.demo-btn{border:1.5px dashed var(--line2);background:var(--card2);border-radius:var(--r);padding:.7rem .6rem;text-align:left}
+.demo-btn:hover{border-color:var(--amber)}
+.demo-btn b{display:block;font-size:.9rem}
+.demo-btn span{font-size:.76rem;color:var(--muted)}
+.login-err{background:var(--bad-bg);color:var(--bad);border-radius:var(--r-sm);padding:.55rem .8rem;font-size:.86rem;margin-bottom:.8rem}
+.login-foot{color:#93a894;text-align:center;font-size:.8rem;padding:1rem}
+
+/* ---------- app shell ---------- */
+#appView{display:none;min-height:100vh}
+.shell{display:flex;min-height:100vh}
+.sidebar{width:252px;flex:none;background:var(--ink);color:#dfe7da;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;z-index:40}
+.brand{display:flex;align-items:center;gap:.65rem;padding:1.05rem 1.1rem .9rem}
+.brand .crest{width:40px;height:40px;border-radius:11px;background:var(--amber);color:#221503;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.05rem;flex:none}
+.brand b{color:#fdf8ec;font-size:1.02rem;display:block;line-height:1.1}
+.brand span{font-size:.7rem;color:#9db3a0;letter-spacing:.06em;text-transform:uppercase}
+.nav{flex:1;overflow-y:auto;padding:.3rem .6rem 1rem}
+.nav h5{margin:.9rem .55rem .35rem;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#7e947f;font-weight:700}
+.nav a{display:flex;align-items:center;gap:.6rem;padding:.5rem .55rem;border-radius:9px;color:#cfdcc9;text-decoration:none;font-size:.9rem;font-weight:550;margin-bottom:2px;position:relative}
+.nav a svg{width:18px;height:18px;flex:none;opacity:.85}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav a.on{background:var(--amber);color:#221503;font-weight:700}
+.nav a.on svg{opacity:1}
+.nav a .nb{margin-left:auto;background:var(--bad);color:#fff;font-size:.66rem;font-weight:800;border-radius:999px;padding:.05rem .42rem}
+.nav a.on .nb{background:#221503;color:var(--amber2)}
+.side-user{border-top:1px solid rgba(255,255,255,.12);padding:.8rem .9rem;display:flex;gap:.6rem;align-items:center}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--amber);color:#221503;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex:none}
+.side-user b{color:#fdf8ec;font-size:.86rem;display:block;line-height:1.15}
+.side-user span{font-size:.72rem;color:#9db3a0}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:.7rem;padding:.6rem 1.2rem}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:var(--card);display:inline-flex;align-items:center;justify-content:center;color:var(--text);flex:none}
+.icon-btn svg{width:19px;height:19px}
+.searchbox{flex:1;max-width:520px;position:relative}
+.searchbox input{width:100%;border:1px solid var(--line2);background:var(--card);border-radius:999px;padding:.55rem 1rem .55rem 2.4rem;outline:none}
+.searchbox input:focus{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+.searchbox .sic{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:var(--faint);display:flex}
+.search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-lg);overflow:hidden;z-index:60}
+.search-results button{display:flex;width:100%;text-align:left;gap:.6rem;align-items:center;padding:.6rem .85rem;background:none;border:none;border-bottom:1px solid var(--line);font-size:.9rem}
+.search-results button:last-child{border-bottom:none}
+.search-results button:hover{background:var(--card2)}
+.search-results .k{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--warn);background:var(--amber-soft);border-radius:5px;padding:.1rem .4rem;flex:none}
+.top-actions{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+.content{padding:1.4rem 1.2rem 3rem;max-width:1180px;width:100%;margin:0 auto}
+.page-head{margin-bottom:1.1rem}
+.page-head h1{font-size:1.55rem;font-family:var(--display);font-weight:700}
+.page-head p{color:var(--muted);margin:.25rem 0 0}
+.foot{border-top:1px solid var(--line);padding:1.1rem 1.2rem;color:var(--muted);font-size:.82rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;max-width:1180px;margin:0 auto;width:100%}
+#menuBtn{display:none}
+.scrim{display:none}
+
+/* ---------- generic cards & grids ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:1.1rem}
+.card h3{font-size:1.02rem}
+.grid{display:grid;gap:1rem}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.mt{margin-top:1rem}.mb{margin-bottom:1rem}
+.muted{color:var(--muted)} .small{font-size:.85rem} .tiny{font-size:.76rem}
+.row{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
+.spread{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.empty{border:1.5px dashed var(--line2);border-radius:var(--r);padding:2rem 1.2rem;text-align:center;color:var(--muted);background:var(--card2)}
+.empty b{color:var(--text);display:block;font-size:1rem;margin-bottom:.25rem}
+table.tbl{width:100%;border-collapse:collapse;font-size:.9rem}
+table.tbl th{text-align:left;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);padding:.5rem .6rem;border-bottom:2px solid var(--line)}
+table.tbl td{padding:.55rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+table.tbl tr:last-child td{border-bottom:none}
+.progress{height:9px;border-radius:99px;background:var(--bg2);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:99px;background:var(--moss);transition:width .5s}
+.progress.amber i{background:var(--amber)} .progress.red i{background:var(--bad)}
+.ring{position:relative;width:104px;height:104px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .rv{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .rv b{font-size:1.35rem;line-height:1}
+.ring .rv span{font-size:.64rem;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+
+/* ---------- dashboard ---------- */
+.hero{background:linear-gradient(120deg,var(--ink) 55%,var(--ink2));color:#eef2e4;border-radius:20px;padding:1.5rem;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.hero:after{content:"";position:absolute;right:-70px;top:-70px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.35),transparent 65%)}
+.hero h1{font-family:var(--display);font-size:clamp(1.5rem,3vw,2rem);color:#fdf8ec}
+.hero p{color:#c3d2bf;margin:.35rem 0 1rem;max-width:56ch}
+.hero .row{position:relative;z-index:1}
+.countdown-chip{background:rgba(245,166,35,.16);border:1px solid rgba(245,166,35,.5);color:#ffd98a;border-radius:12px;padding:.55rem .9rem;font-weight:700}
+.countdown-chip b{font-size:1.15rem;color:#fff}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1rem 1.1rem;box-shadow:var(--shadow)}
+.stat .k{font-size:.74rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.stat .v{font-size:2rem;font-weight:800;line-height:1.1;margin:.15rem 0}
+.stat .s{font-size:.82rem;color:var(--muted)}
+.class-row{display:flex;gap:.85rem;padding:.75rem 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.class-row:last-child{border-bottom:none}
+.timebox{background:var(--amber-soft);color:var(--warn);border-radius:10px;padding:.45rem .55rem;text-align:center;font-weight:800;font-size:.78rem;min-width:86px;line-height:1.25}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:.8rem}
+.cal .dow{text-align:center;color:var(--faint);font-weight:700;font-size:.68rem;padding:.2rem 0}
+.cal .d{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--muted)}
+.cal .d.today{background:var(--amber);color:#221503;font-weight:800}
+.cal .d.has{font-weight:700;color:var(--text);box-shadow:inset 0 0 0 1.5px var(--amber)}
+.cal .d.dim{opacity:.3}
+
+/* ---------- courses ---------- */
+.course-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.1rem;box-shadow:var(--shadow);cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:.55rem}
+.course-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--amber)}
+.course-card h3{font-size:1rem}
+.att-big{font-size:1.9rem;font-weight:800;line-height:1}
+.tabs{display:flex;gap:.35rem;flex-wrap:wrap;border-bottom:2px solid var(--line);margin-bottom:1.1rem}
+.tabs button{background:none;border:none;padding:.55rem .8rem;font-weight:650;font-size:.92rem;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs button.on{color:var(--text);border-bottom-color:var(--amber)}
+.dotgrid{display:flex;flex-wrap:wrap;gap:5px}
+.dot{width:15px;height:15px;border-radius:50%;border:2px solid var(--line2);background:transparent}
+.dot.p{background:var(--good);border-color:var(--good)} .dot.a{background:var(--bad);border-color:var(--bad)}
+.month-blk{border:1px solid var(--line);border-radius:var(--r-sm);padding:.8rem;background:var(--card2)}
+.month-blk h4{font-size:.92rem;display:flex;justify-content:space-between}
+.month-blk h4 span{color:var(--muted);font-weight:600;font-size:.82rem}
+
+/* ---------- quizzes ---------- */
+.quiz-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:1.05rem 1.1rem;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:.5rem}
+.qmeta{display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.84rem}
+.qnav{display:flex;flex-wrap:wrap;gap:.4rem}
+.qnav button{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--line2);background:var(--card);font-weight:700}
+.qnav button.done{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.qnav button.cur{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+.qnav button.right{background:var(--good);color:#fff;border-color:var(--good)}
+.qnav button.wrong{background:var(--bad);color:#fff;border-color:var(--bad)}
+.opt{display:flex;gap:.7rem;width:100%;text-align:left;border:1.5px solid var(--line2);background:var(--card);border-radius:var(--r-sm);padding:.75rem .9rem;font-size:.95rem;align-items:flex-start}
+.opt:hover{border-color:var(--amber)}
+.opt.sel{border-color:var(--amber);background:var(--amber-soft)}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt .ol{font-weight:800;flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.timer{font-size:1.5rem;font-weight:800;background:var(--ink);color:#fdf8ec;border-radius:12px;padding:.35rem 1rem}
+[data-theme="dark"] .timer{background:var(--amber);color:#221503}
+.timer.low{background:var(--bad);color:#fff;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.65}}
+
+/* ---------- notices / articles ---------- */
+.notice{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:1.05rem 1.15rem;box-shadow:var(--shadow)}
+.notice.unread{border-left:5px solid var(--amber)}
+.article-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.15s}
+.article-card:hover{transform:translateY(-2px)}
+.article-cover{height:110px;display:flex;align-items:flex-end;padding:.7rem;color:#fff;font-weight:800;font-size:.8rem;letter-spacing:.04em}
+.spot-wrap{position:relative;border-radius:20px;overflow:hidden;min-height:210px;display:flex;align-items:flex-end;color:#fff;box-shadow:var(--shadow-lg)}
+.spot-wrap .inner{padding:1.4rem;position:relative;z-index:1;max-width:640px}
+.spot-nav{position:absolute;right:1rem;bottom:1rem;display:flex;gap:.4rem;z-index:2}
+
+/* ---------- timetable ---------- */
+.tt-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--card);box-shadow:var(--shadow)}
+table.tt{border-collapse:collapse;min-width:760px;width:100%;font-size:.84rem}
+table.tt th,table.tt td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:.55rem .6rem;vertical-align:top;text-align:left}
+table.tt th{background:var(--card2);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+table.tt td:last-child,table.tt th:last-child{border-right:none}
+.tt-cell b{display:block;font-size:.85rem}
+.tt-cell span{color:var(--muted);font-size:.76rem}
+
+/* ---------- id card ---------- */
+.idcard{width:340px;max-width:100%;aspect-ratio:1.586;border-radius:16px;background:linear-gradient(135deg,var(--ink),var(--pine));color:#eef2e4;padding:1.1rem 1.2rem;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.idcard:after{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(245,166,35,.25)}
+.idcard .amber-bar{height:6px;background:var(--amber);border-radius:99px;width:64px;margin-bottom:.7rem}
+.idcard h3{color:#fdf8ec;font-family:var(--display)}
+.idcard dl{display:grid;grid-template-columns:auto 1fr;gap:.15rem .8rem;font-size:.8rem;margin:.7rem 0 0;position:relative;z-index:1}
+.idcard dt{color:#a9bfa9} .idcard dd{margin:0;font-weight:650}
+.id-back{background:linear-gradient(135deg,#274435,var(--ink2))}
+
+/* ---------- modal / toast ---------- */
+.modal-bg{position:fixed;inset:0;background:rgba(6,18,12,.55);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:var(--card);border-radius:18px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;padding:1.4rem;box-shadow:var(--shadow-lg)}
+.modal.wide{max-width:760px}
+#toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fdf8ec;padding:.7rem 1.2rem;border-radius:999px;font-weight:650;font-size:.9rem;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:var(--shadow-lg);max-width:92vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.checkline{display:flex;gap:.6rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid var(--line)}
+.checkline:last-child{border-bottom:none}
+.checkline input{width:20px;height:20px;margin-top:.15rem;accent-color:var(--moss);flex:none}
+.checkline.done span{text-decoration:line-through;color:var(--faint)}
+textarea.ta{width:100%;border:1px solid var(--line2);border-radius:var(--r-sm);padding:.6rem .75rem;background:var(--card);min-height:90px;resize:vertical}
+.alert-strip{display:flex;gap:.7rem;align-items:flex-start;border-radius:var(--r);padding:.85rem 1rem;font-size:.92rem}
+.alert-strip.red{background:var(--bad-bg);color:var(--bad)} .alert-strip.amber{background:var(--amber-soft);color:var(--warn)}
+.alert-strip b{color:inherit}
+
+@media (max-width:900px){
+  .g4{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:1fr 1fr}
+  .login-grid{grid-template-columns:1fr;gap:1.6rem}
+  .login-feats{display:none}
+}
+@media (max-width:760px){
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-105%);transition:.25s;width:262px}
+  .sidebar.open{transform:none;box-shadow:var(--shadow-lg)}
+  .scrim{display:block;position:fixed;inset:0;background:rgba(6,18,12,.5);z-index:39;opacity:0;pointer-events:none;transition:.25s}
+  .scrim.on{opacity:1;pointer-events:auto}
+  #menuBtn{display:inline-flex}
+  .g2,.g3{grid-template-columns:1fr}
+  .content{padding:1rem .85rem 2.5rem}
+  .searchbox{max-width:none}
+  .hero{padding:1.15rem}
+}
+@media print{
+  .sidebar,.topbar,.foot,.no-print{display:none!important}
+  .content{max-width:none;padding:0}
+  body{background:#fff}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginView">
+  <div class="login-wrap">
+    <div class="login-grid">
+      <div class="login-hero">
+        <div class="crest">M</div>
+        <h1>The campus portal,<br/>rebuilt to be <em>actually useful</em>.</h1>
+        <p>Attendance with a bunk predictor, timed quizzes with instant results, a real timetable, notices that warn you before they expire — one portal for students and faculty of Madhav Institute of Technology &amp; Science, Gwalior.</p>
+        <div class="login-feats">
+          <div><b>Bunk Predictor</b>Safe bunks &amp; classes needed for 75%, per course</div>
+          <div><b>Timed Quizzes</b>Auto-graded, with answer review &amp; explanations</div>
+          <div><b>Faculty Tools</b>Mark attendance, publish quizzes, notices &amp; results</div>
+          <div><b>Exam Countdown</b>Major Evaluations from 23 Nov 2026, always in sight</div>
+        </div>
+      </div>
+      <div class="login-card">
+        <h2>Sign in to MITS Portal</h2>
+        <p class="sub">Use your institute Google account — <b>@mitsgwl.ac.in</b> for students, <b>@mitsgwalior.in</b> for faculty.</p>
+        <div id="loginErr" class="login-err hidden"></div>
+        <button class="gbtn" id="googleBtn" type="button">
+          <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34.3 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34.3 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+          Sign in with Google
+        </button>
+        <div class="or">OR USE THE DEMO ACCOUNTS</div>
+        <div class="demo-row">
+          <button class="demo-btn" id="demoStudent" type="button"><b>Student demo</b><span>Sanidhya Sharma · AI &amp; DS, Sem 1</span></button>
+          <button class="demo-btn" id="demoFaculty" type="button"><b>Faculty demo</b><span>Dr. Divya · Introduction to Computing</span></button>
+        </div>
+        <form id="emailForm" style="margin-top:1.1rem">
+          <div class="field"><label for="loginEmail">Institute email</label>
+            <input id="loginEmail" type="email" placeholder="you@mitsgwl.ac.in" autocomplete="email" /></div>
+          <button class="btn primary" style="width:100%" type="submit">Continue with email</button>
+        </form>
+        <p class="tiny muted" style="margin-top:.9rem">Demo build: sign-in is simulated in your browser and everything you add is saved on this device only. No data leaves your browser.</p>
+      </div>
+    </div>
+  </div>
+  <div class="login-foot">Madhav Institute of Technology &amp; Science, Gwalior · Portal concept — a better AMS · Made by Vaibhav Sharma under SDC Club</div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="appView">
+  <div class="shell">
+    <div class="scrim" id="scrim"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><div class="crest">M</div><div><b>MITS Portal</b><span id="brandRole">Student</span></div></div>
+      <nav class="nav" id="nav"></nav>
+      <div class="side-user">
+        <div class="avatar" id="sideAvatar">SS</div>
+        <div style="min-width:0"><b id="sideName">Sanidhya Sharma</b><span id="sideMeta">26MC1SA112</span></div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <div class="searchbox">
+          <span class="sic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span>
+          <input id="globalSearch" type="search" placeholder="Search courses, quizzes, notices, schemes…" autocomplete="off" />
+          <div class="search-results hidden" id="searchResults"></div>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="themeBtn" aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button>
+          <button class="icon-btn" id="profileBtn" aria-label="Profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-5.5 8-5.5s6.5 1.5 8 5.5"/></svg></button>
+        </div>
+      </header>
+      <main class="content" id="view"></main>
+      <footer class="foot"><span>Made by Vaibhav Sharma under SDC Club</span><span>MITS Gwalior · Academic Session 2026–27</span></footer>
+    </div>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toast" role="status"></div>
+<div id="printArea" class="hidden"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   MITS PORTAL — data layer
+   Everything lives in one store, saved to this browser (localStorage),
+   so the site is 100% static and publishable on GitHub Pages / Vercel.
+   Seed = the real AMS snapshot for the demo student (Sanidhya Sharma).
+   Faculty actions write into the same store, so they appear instantly
+   in the student view — the full AMS loop, in one static page.
+===================================================================== */
+var LS_KEY = "mits_portal_v3";
+var THEME_KEY = "mits_portal_theme";
+
+var STUDENT = {
+  name:"Sanidhya Sharma", first:"Sanidhya",
+  program:"B.Tech. Artificial Intelligence and Data Science",
+  branch:"Artificial Intelligence and Data Science",
+  year:"1st Year", sem:"1st Semester", semNo:1, section:"Section H",
+  roll:"26MC1SA112", enrol:"0901CS261112", batch:"2026–2030",
+  email:"26mc1sa112@mitsgwl.ac.in",
+  mentor:"Dr. Sunita Sharma"
+};
+var FACULTY_DEMO = { name:"Dr. Divya", dept:"Computer Science & Engineering", email:"divya@mitsgwalior.in", courseId:"ic" };
+
+/* deterministic session generator: builds dated P/A records that add up
+   exactly to each course's real attended/total figures */
+function lcg(seed){ var s = seed>>>0; return function(){ s = (s*1664525 + 1013904223)>>>0; return s/4294967296; }; }
+function genSessions(courseIdx, months, slots){
+  /* months: [{m:'Aug', y:2026, total, attended}] slots: weekday numbers (Mon=1..) */
+  var out = [], mi;
+  for(mi=0; mi<months.length; mi++){
+    var mo = months[mi], monthIdx = {Aug:7,Sep:8,Oct:9,Nov:10}[mo.m];
+    var days = [];
+    var d = new Date(mo.y, monthIdx, 1);
+    while(d.getMonth()===monthIdx){ if(slots.indexOf(d.getDay())>=0) days.push(d.getDate()); d.setDate(d.getDate()+1); }
+    var rnd = lcg(97*courseIdx + 13*monthIdx + 7);
+    while(days.length > mo.total){ days.splice(Math.floor(rnd()*days.length),1); }
+    var marks = days.map(function(){ return true; });
+    var abs = mo.total - mo.attended, guard=0;
+    while(abs>0 && guard<500){ var i = Math.floor(rnd()*marks.length); if(marks[i]){ marks[i]=false; abs--; } guard++; }
+    days.forEach(function(day,i){
+      var dt = new Date(mo.y, monthIdx, day);
+      out.push({ date: dt.toISOString().slice(0,10), present: marks[i] });
+    });
+  }
+  out.sort(function(a,b){ return a.date < b.date ? -1 : 1; });
+  return out;
+}
+var MONTHS_STD = [ /* Aug–Nov split used for courses where AMS gave only totals */
+  {m:"Aug",y:2026,f:.24},{m:"Sep",y:2026,f:.32},{m:"Oct",y:2026,f:.28},{m:"Nov",y:2026,f:.16}
+];
+function splitMonths(total, attended, idx){
+  var rnd = lcg(idx*31+5), parts = MONTHS_STD.map(function(mm,i){
+    var t = (i===3) ? total - 0 : Math.round(total*mm.f);
+    return {m:mm.m, y:mm.y, total:t};
+  });
+  var sum = parts.reduce(function(a,p){return a+p.total;},0), k=3;
+  while(sum>total){ if(parts[k].total>0){parts[k].total--; sum--;} k=(k+3)%4; }
+  while(sum<total){ parts[k].total++; sum++; k=(k+1)%4; }
+  var left = attended;
+  parts.forEach(function(p,i){ var a = (i===3)? left : Math.min(p.total, Math.round(attended*(p.total/Math.max(total,1)) + (rnd()-.5)*2)); a=Math.max(0,Math.min(p.total,a)); p.attended=a; left-=a; });
+  var drift = attended - parts.reduce(function(a,p){return a+p.attended;},0), j=0;
+  while(drift!==0 && j<40){ var p=parts[j%4]; if(drift>0 && p.attended<p.total){p.attended++; drift--;} else if(drift<0 && p.attended>0){p.attended--; drift++;} j++; }
+  return parts;
+}
+
+var COURSES_SEED = [
+ { id:"ic", name:"Introduction to Computing", faculty:"Dr. Divya", room:"J010", attended:15, total:18,
+   slots:[{d:"Tue",t:"4:00–5:00 PM"},{d:"Wed",t:"3:00–4:00 PM"},{d:"Thu",t:"2:00–3:00 PM"}], slotDays:[2,3,4],
+   months:[{m:"Aug",y:2026,total:12,attended:11},{m:"Sep",y:2026,total:15,attended:14},{m:"Oct",y:2026,total:14,attended:10},{m:"Nov",y:2026,total:6,attended:6}],
+   plan:["Unit 1 · Computer fundamentals — generations, hardware, software, number systems","Unit 2 · Operating systems — processes, memory, file systems","Unit 3 · Programming basics — algorithms, flowcharts, pseudocode","Unit 4 · Computer networks & the Internet — LAN/WAN, protocols, web basics","Unit 5 · Data & AI overview — data types, databases, intro to machine learning"],
+   materials:[{name:"Unit 1 — Computer Fundamentals (Slides)",type:"PDF · 2.4 MB"},{name:"Number Systems — Practice Sheet",type:"PDF · 380 KB"},{name:"OS Concepts — Reference Notes",type:"PDF · 1.1 MB"}],
+   marks:[{exam:"Quiz Centralized", score:8, max:20, avg:55.1, status:"Published"}] },
+ { id:"cprog", name:"Computer Programming in C", faculty:"", room:"", attended:20, total:25, slots:[], slotDays:[1,3,5], plan:[], materials:[], marks:[] },
+ { id:"math1", name:"Mathematics-I", faculty:"", room:"", attended:16, total:25, slots:[], slotDays:[1,2,4,5], plan:[], materials:[], marks:[] },
+ { id:"bee", name:"Basic Electrical Engineering", faculty:"", room:"", attended:16, total:24, slots:[], slotDays:[2,3,5], plan:[], materials:[], marks:[] },
+ { id:"em", name:"Engineering Mechanics", faculty:"Dr. Shubham Sharma", room:"J008", attended:4, total:7,
+   slots:[{d:"Mon",t:"10:00–11:00 AM"},{d:"Mon",t:"11:00 AM–12:00 PM"}], slotDays:[1], plan:[], materials:[], marks:[] },
+ { id:"phy", name:"Engineering Physics", faculty:"", room:"", attended:8, total:8, slots:[], slotDays:[2,4], plan:[], materials:[], marks:[] },
+ { id:"hve", name:"Human Values & Ethics", faculty:"Amrita Singh", room:"J010", attended:3, total:6,
+   slots:[{d:"Sat",t:"10:00–11:00 AM"}], slotDays:[6], plan:[], materials:[], marks:[] },
+ { id:"ed", name:"Engineering Drawing", faculty:"", room:"", attended:3, total:5, slots:[], slotDays:[3], plan:[], materials:[], marks:[] },
+ { id:"cs", name:"Communication Skills", faculty:"", room:"", attended:2, total:3, slots:[], slotDays:[5], plan:[], materials:[], marks:[] },
+ { id:"iks", name:"Indian Knowledge System", faculty:"", room:"", attended:1, total:1, slots:[], slotDays:[6], plan:[], materials:[], marks:[] }
+];
+COURSES_SEED.forEach(function(c, i){
+  if(!c.months) c.months = splitMonths(c.total, c.attended, i+1);
+  c.sessions = genSessions(i+1, c.months, c.slotDays.length?c.slotDays:[1,3]);
+});
+
+var IC_QUESTIONS = [
+ {q:"Which of these is an input device?", opts:["Monitor","Keyboard","Printer","Speaker"], ans:1, why:"A keyboard sends data into the computer; monitors, printers and speakers are output devices."},
+ {q:"Binary equivalent of decimal 13 is:", opts:["1011","1101","1110","1001"], ans:1, why:"13 = 8 + 4 + 1 = 1101 in binary."},
+ {q:"Which memory is volatile?", opts:["ROM","SSD","RAM","Hard disk"], ans:2, why:"RAM loses its contents when power is switched off, so it is volatile."},
+ {q:"The brain of the computer is the:", opts:["Hard disk","RAM","CPU","Monitor"], ans:2, why:"The CPU (Central Processing Unit) executes instructions and coordinates all operations."},
+ {q:"1 Kilobyte (KB) equals:", opts:["1000 bytes","1024 bytes","512 bytes","2048 bytes"], ans:1, why:"In computing, 1 KB = 1024 bytes (2^10)."},
+ {q:"Which of these is system software?", opts:["MS Word","Windows OS","Chrome","Photoshop"], ans:1, why:"An operating system like Windows is system software; the rest are applications."},
+ {q:"What does 'www' stand for?", opts:["World Wide Web","Web World Wide","Wide World Web","World Web Window"], ans:0, why:"WWW = World Wide Web, the system of interlinked hypertext documents."},
+ {q:"Which language is directly understood by the computer?", opts:["C","Python","Machine language","Assembly"], ans:2, why:"The CPU executes machine language (binary instructions) directly."},
+ {q:"A flowchart's decision is drawn as a:", opts:["Rectangle","Oval","Diamond","Parallelogram"], ans:2, why:"A diamond represents a decision/branching point in a flowchart."},
+ {q:"Which protocol is used to transfer web pages?", opts:["FTP","SMTP","HTTP","POP3"], ans:2, why:"HTTP (HyperText Transfer Protocol) serves web pages between browser and server."}
+];
+
+var QUIZZES_SEED = [
+ { id:"ic-q1", courseId:"ic", title:"Quiz-1", date:"2026-09-14", window:"10:00–10:10 AM", marks:10, nq:10, dur:10, status:"Completed",
+   result:{ score:7, correct:6, wrong:4, skipped:0, timeTaken:"—", start:"14 Sep 2026, 10:01 AM", submit:"14 Sep 2026, 10:09 AM" } },
+ { id:"ic-q2", courseId:"ic", title:"Quiz-2", date:"2026-09-30", window:"10:00–10:15 AM", marks:15, nq:15, dur:15, status:"Completed",
+   result:{ score:9, correct:null, wrong:null, skipped:null, timeTaken:"—", start:"30 Sep 2026, 10:00 AM", submit:"30 Sep 2026, 10:13 AM" } },
+ { id:"ic-q3", courseId:"ic", title:"Quiz-3", date:"2026-10-21", window:"10:00–10:15 AM", marks:15, nq:15, dur:15, status:"Completed",
+   result:{ score:8, correct:7, wrong:8, skipped:0, timeTaken:"2 min 46 sec", start:"21 Oct 2026, 10:02 AM", submit:"21 Oct 2026, 10:05 AM" }, questions:IC_QUESTIONS },
+ { id:"ic-q4", courseId:"ic", title:"Quiz-4", date:"2026-11-04", window:"10:00–10:15 AM", marks:15, nq:10, dur:15, status:"Pending", questions:IC_QUESTIONS },
+ { id:"ic-q5", courseId:"ic", title:"Quiz-5", date:"2026-11-18", window:"10:00–10:15 AM", marks:15, nq:10, dur:15, status:"Pending", questions:IC_QUESTIONS }
+];
+
+var NOTICES_SEED = [
+ { id:"n1", title:"Instructions for Major Evaluations Scheduled from 23rd November 2026", cat:"Examination", by:"Exam Controller",
+   date:"2026-11-20", expires:"2026-12-21T23:59", audience:["All Students","Semester 1"],
+   body:"Major Evaluations for Semester 1 begin on Monday, 23 November 2026. Students must carry their institute ID card and admit card to every examination. Reporting time is 30 minutes before the scheduled start. Mobile phones and smart watches are strictly prohibited inside the examination hall. The detailed date sheet is available with your class coordinator.",
+   pdf:"Major-Evaluations-Instructions.pdf" },
+ { id:"n2", title:"Logo Design Competition", cat:"Event", by:"SDC Club",
+   date:"2026-11-17", expires:"2026-11-24T23:59", audience:["All Students"],
+   body:"Design the new logo for the Student Development Cell. Entries are open to all students of MITS. Submit your design in vector format along with a short concept note. The winning design will be adopted officially and the winner receives a certificate and goodies.",
+   pdf:"Logo-Design-Competition.pdf" },
+ { id:"n3", title:"NSP One Time Registration (OTR) Notice", cat:"Scholarship", by:"Scholarship Section",
+   date:"2026-10-08", expires:"2026-12-21T23:59", audience:["All Students"],
+   body:"All students applying for scholarships on the National Scholarship Portal (NSP) must complete the One Time Registration (OTR) before filling the application form. OTR requires Aadhaar-based verification. Complete it well before the application deadline to avoid last-day failures.",
+   pdf:"NSP-OTR-Notice.pdf" },
+ { id:"n4", title:"Post-Matric Scholarship for SC/ST/OBC Students", cat:"Scholarship", by:"Scholarship Section",
+   date:"2026-09-16", expires:"2026-11-30T23:59", audience:["SC / ST / OBC Students"],
+   body:"Applications are invited for the Post-Matric Scholarship for eligible SC, ST and OBC category students for the academic year 2026–27. Apply on the state scholarship portal and submit the hard copy with income certificate, caste certificate and last examination marksheet to the scholarship section.",
+   pdf:"Post-Matric-Scholarship.pdf" },
+ { id:"n5", title:"Document Submission for 2026–2027 Entrants", cat:"General Notice", by:"Admission Cell",
+   date:"2026-09-02", expires:"2026-09-30T23:59", audience:["2026–27 Entrants"],
+   body:"All students admitted in the academic year 2026–2027 must submit the pending original documents (transfer certificate, migration certificate, character certificate and gap certificate if applicable) to the admission cell at the earliest. Failure to submit may affect enrolment confirmation.",
+   pdf:"Document-Submission-Notice.pdf" }
+];
+
+var SCHEMES_SEED = [
+ { id:"s1", title:"B.Tech — Artificial Intelligence & Data Science", program:"B.Tech", dept:"Computer Science & Engineering", branch:"AI & Data Science", reg:"2026", sem:1, year:2026,
+   subjects:["Introduction to Computing","Computer Programming in C","Mathematics-I","Basic Electrical Engineering","Engineering Mechanics","Engineering Physics","Human Values & Ethics","Engineering Drawing","Communication Skills","Indian Knowledge System"] },
+ { id:"s2", title:"B.Tech — Computer Science & Engineering", program:"B.Tech", dept:"Computer Science & Engineering", branch:"CSE", reg:"2026", sem:1, year:2026,
+   subjects:["Mathematics-I","Engineering Physics","Computer Programming in C","Basic Electrical Engineering","Engineering Drawing","Communication Skills"] },
+ { id:"s3", title:"B.Tech — Electronics & Communication", program:"B.Tech", dept:"Electronics & Communication", branch:"ECE", reg:"2026", sem:1, year:2026,
+   subjects:["Mathematics-I","Engineering Physics","Basic Electrical Engineering","Engineering Mechanics","Computer Programming in C","Human Values & Ethics"] },
+ { id:"s4", title:"B.Tech — All Branches (Common Scheme)", program:"B.Tech", dept:"All Departments", branch:"All Branches", reg:"2022", sem:1, year:2022,
+   subjects:["Mathematics-I","Engineering Physics","Engineering Chemistry","Basic Electrical Engineering","Engineering Drawing","Communication Skills"] },
+ { id:"s5", title:"M.Tech — Computer Science & Engineering", program:"M.Tech", dept:"Computer Science & Engineering", branch:"CSE", reg:"2024", sem:1, year:2024,
+   subjects:["Advanced Data Structures","Machine Learning","Research Methodology","Advanced Computer Networks"] },
+ { id:"s6", title:"MBA — Master of Business Administration", program:"MBA", dept:"Humanities & Management", branch:"MBA", reg:"2025", sem:1, year:2025,
+   subjects:["Principles of Management","Organisational Behaviour","Managerial Economics","Accounting for Management","Business Communication"] }
+];
+
+var CAL_SEED = {
+  sem1:[
+    {date:"2026-08-03", title:"Semester 1 classes commence", type:"Academic"},
+    {date:"2026-09-14", title:"Quiz-1 · Introduction to Computing", type:"Assessment"},
+    {date:"2026-10-20", title:"Diwali break begins", type:"Holiday"},
+    {date:"2026-10-26", title:"Classes resume after Diwali break", type:"Academic"},
+    {date:"2026-11-17", title:"Logo Design Competition — last date", type:"Event"},
+    {date:"2026-11-21", title:"Human Values & Ethics — Lecture (J010)", type:"Academic"},
+    {date:"2026-11-23", title:"Major Evaluations begin", type:"Examination"},
+    {date:"2026-12-05", title:"Major Evaluations end", type:"Examination"},
+    {date:"2026-12-21", title:"Semester 1 ends", type:"Academic"}
+  ],
+  sem2:[
+    {date:"2027-01-05", title:"Semester 2 classes commence (tentative)", type:"Academic"},
+    {date:"2027-03-15", title:"Mid-semester assessments (tentative)", type:"Assessment"},
+    {date:"2027-05-10", title:"Major Evaluations — Semester 2 (tentative)", type:"Examination"}
+  ]
+};
+
+var ARTICLES_SEED = [
+ { id:"a1", title:"How I Fixed My Attendance Before the Major Evaluations", cat:"Academic", author:"Senior Contributor · CSE", date:"2026-11-19", likes:128, featured:true,
+   body:"Three weeks before the majors, my attendance in two subjects was under 60%. Here is the exact plan I used: I listed every remaining class, attended all of them without exception, and spoke to both faculty members early instead of after the shortage list came out. The lesson is simple — attendance is a November problem only if you ignore it in September." },
+ { id:"a2", title:"Inside the SDC Hackathon: 36 Hours, 40 Teams, One Trophy", cat:"Tech", author:"SDC Club", date:"2026-11-15", likes:96, featured:true,
+   body:"The Student Development Cell's annual hackathon drew 40 teams this year. Projects ranged from a hostel complaint tracker to an AI timetable assistant. The winning team built a working prototype that reads the academic calendar and warns students about clashing deadlines." },
+ { id:"a3", title:"Inter-College Football: MITS Reaches the Semi-Finals", cat:"Sports", author:"Sports Council", date:"2026-11-12", likes:74, featured:false,
+   body:"A late goal in the quarter-final sent the MITS football team into the semi-finals of the inter-college tournament. The semi-final is scheduled next week at the institute ground — come and support the team." },
+ { id:"a4", title:"The Library's New Reading Room Is Finally Open", cat:"Campus Life", author:"Library Committee", date:"2026-11-08", likes:61, featured:false,
+   body:"The renovated reading room on the first floor of the central library is now open till 9 PM on working days. It seats 120 students and has charging points at every table — already a favourite during evaluation season." },
+ { id:"a5", title:"Opinion: Why Every First-Year Should Join One Club", cat:"Opinion", author:"Guest Writer · 2nd Year", date:"2026-11-03", likes:52, featured:false,
+   body:"Marks matter, but the people you meet in clubs are the ones who will help you through placements, projects and bad semesters. Pick one club, show up every week, and take one small responsibility. That is all it takes." }
+];
+
+var ROSTER = ["Sanidhya Sharma","Aarav Verma","Priya Nair","Rohan Gupta","Sneha Patel","Arjun Mehta","Kavya Reddy","Vikram Singh","Ananya Iyer","Rahul Yadav","Ishita Kapoor","Aditya Rao","Meera Joshi","Karan Malhotra"];
+var ROLLS = ["26MC1SA112","26MC1SA101","26MC1SA102","26MC1SA103","26MC1SA104","26MC1SA105","26MC1SA106","26MC1SA107","26MC1SA108","26MC1SA109","26MC1SA110","26MC1SA111","26MC1SA113","26MC1SA114"];
+
+function seedDB(){
+  return {
+    courses: JSON.parse(JSON.stringify(COURSES_SEED)),
+    quizzes: JSON.parse(JSON.stringify(QUIZZES_SEED)),
+    notices: JSON.parse(JSON.stringify(NOTICES_SEED)),
+    schemes: JSON.parse(JSON.stringify(SCHEMES_SEED)),
+    calendar: JSON.parse(JSON.stringify(CAL_SEED)),
+    articles: JSON.parse(JSON.stringify(ARTICLES_SEED)).map(function(a){ a.demo = true; return a; }),
+    /* my own space — starts empty, filled by me, clearly separated from AMS data */
+    mine: {
+      planner: [], assignments: [], myQuizzes: [], attempts: [],
+      notes: {}, /* courseId -> {lecture, summary, qa, diagrams} */
+      files: [], mentorLog: [], questions: [], myEvents: [],
+      readNotices: [], likedArticles: [], cgpaRows: null, support: []
+    },
+    facultySessions: [], /* {courseId, date, marks:{roll:true/false}} */
+    resultsPublished: false
+  };
+}
+var DB;
+try { DB = JSON.parse(localStorage.getItem(LS_KEY)) || seedDB(); if(!DB.mine) DB = seedDB(); }
+catch(e){ DB = seedDB(); }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(DB)); }catch(e){} }
+
+/* ---------------- state & helpers ---------------- */
+var state = { user:null, view:"dashboard", courseId:null, courseTab:"info", quizId:null, attempt:null, calTab:"sem1", calView:"month", pulseCat:"All", noticeCat:"All", quizFilter:"All" };
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function pct(a,t){ return t? Math.round(a/t*1000)/10 : 0; }
+function courseById(id){ return DB.courses.find(function(c){ return c.id===id; }); }
+function fmtDate(iso){ if(!iso) return "—"; var d=new Date(iso+"T00:00:00"); return d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}); }
+function fmtDateShort(iso){ var d=new Date(iso+"T00:00:00"); return d.toLocaleDateString("en-IN",{day:"numeric",month:"short"}); }
+function dayName(iso){ return new Date(iso+"T00:00:00").toLocaleDateString("en-IN",{weekday:"short"}); }
+function todayISO(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function toast(msg){ var t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove("show"); },2600); }
+function modal(html, wide){ $("modalRoot").innerHTML = '<div class="modal-bg" id="modalBg"><div class="modal'+(wide?" wide":"")+'">'+html+'</div></div>';
+  $("modalBg").addEventListener("click", function(e){ if(e.target.id==="modalBg") closeModal(); }); }
+function closeModal(){ $("modalRoot").innerHTML=""; }
+function bunkInfo(a,t){
+  var p = pct(a,t);
+  if(p >= 75){ var b = Math.floor(a/0.75 - t); return { pct:p, safe: Math.max(0,b), need:0 }; }
+  var need = Math.ceil((0.75*t - a)/0.25);
+  return { pct:p, safe:0, need: Math.max(0,need) };
+}
+function attColor(p){ return p>=75 ? "var(--good)" : (p>=60 ? "var(--amber)" : "var(--bad)"); }
+function ringSVG(p, size){
+  var r=44, c=2*Math.PI*r, off=c*(1-Math.min(p,100)/100);
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 104 104"><circle cx="52" cy="52" r="'+r+'" fill="none" stroke="var(--bg2)" stroke-width="10"/><circle cx="52" cy="52" r="'+r+'" fill="none" stroke="'+attColor(p)+'" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+c+'" stroke-dashoffset="'+off+'"/></svg>';
+}
+function expiryInfo(n){
+  var end = new Date(n.expires), now = new Date();
+  var diff = end - now;
+  var label = "Active · until " + end.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}) + ", " + end.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"}).toLowerCase();
+  if(diff < 0) return { label:"Expired · " + end.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}), soon:"Expired", cls:"red" };
+  var h = Math.floor(diff/36e5), d = Math.floor(h/24);
+  var soon = d>=1 ? ("Expires in "+d+"d") : ("Expires in "+Math.max(h,0)+"h");
+  return { label:label, soon:soon, cls: d<3 ? "amber" : "green" };
+}
+function examCountdown(){
+  var target = new Date("2026-11-23T09:00:00"), now = new Date(), diff = target-now;
+  if(diff<=0) return { d:0,h:0,m:0, live:true };
+  return { d:Math.floor(diff/864e5), h:Math.floor(diff/36e5)%24, m:Math.floor(diff/6e4)%60, live:false };
+}
+/* tiny text-PDF generator (for ID card / scheme / notice downloads) */
+function makePDF(lines, filename){
+  var content = "BT /F1 13 Tf 56 780 Td 18 TL ";
+  lines.forEach(function(l,i){ content += "(" + String(l).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/[^\x20-\x7E]/g,"-") + ") Tj " + (i<lines.length-1 ? "T* " : ""); });
+  content += "ET";
+  var objs = ["<< /Type /Catalog /Pages 2 0 R >>","<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>",
+    "<< /Length " + content.length + " >>\nstream\n" + content + "\nendstream",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"];
+  var pdf = "%PDF-1.4\n", offsets=[0];
+  objs.forEach(function(o,i){ offsets.push(pdf.length); pdf += (i+1) + " 0 obj\n" + o + "\nendobj\n"; });
+  var xref = pdf.length;
+  pdf += "xref\n0 " + (objs.length+1) + "\n0000000000 65535 f \n";
+  for(var i=1;i<offsets.length;i++){ pdf += String(offsets[i]).padStart(10,"0") + " 00000 n \n"; }
+  pdf += "trailer\n<< /Size " + (objs.length+1) + " /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF";
+  var blob = new Blob([pdf], {type:"application/pdf"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+}
+function downloadText(name, text){
+  var blob = new Blob([text], {type:"text/plain"});
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+}
+</script>
+
+<script>
+/* ================= AUTH ================= */
+function applyTheme(t){ document.documentElement.setAttribute("data-theme", t); try{ localStorage.setItem(THEME_KEY, t); }catch(e){} }
+applyTheme((function(){ try{ return localStorage.getItem(THEME_KEY) || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }catch(e){ return "light"; } })());
+$("themeBtn").addEventListener("click", function(){
+  var cur = document.documentElement.getAttribute("data-theme");
+  applyTheme(cur==="dark" ? "light" : "dark");
+  toast("Theme: " + (cur==="dark" ? "Light" : "Dark"));
+});
+function loginError(msg){ var e=$("loginErr"); if(msg){ e.textContent=msg; e.classList.remove("hidden"); } else e.classList.add("hidden"); }
+function signIn(role, name, email){
+  state.user = { role:role, name:name, email:email };
+  $("loginView").style.display="none"; $("appView").style.display="block";
+  $("brandRole").textContent = role==="faculty" ? "Faculty" : "Student";
+  $("sideName").textContent = name;
+  $("sideMeta").textContent = role==="faculty" ? "Faculty · MITS" : STUDENT.roll + " · Sem " + STUDENT.semNo;
+  $("sideAvatar").textContent = name.split(" ").map(function(w){ return w[0]; }).slice(0,2).join("").replace("D","D");
+  buildNav();
+  go(role==="faculty" ? "f-dash" : "dashboard");
+  toast(role==="student" ? "Welcome back, Sanidhya" : "Welcome, " + name);
+}
+$("demoStudent").addEventListener("click", function(){ signIn("student", STUDENT.name, STUDENT.email); });
+$("demoFaculty").addEventListener("click", function(){ signIn("faculty", FACULTY_DEMO.name, FACULTY_DEMO.email); });
+$("googleBtn").addEventListener("click", function(){
+  modal('<h3 style="margin-bottom:.4rem">Choose an account</h3><p class="muted small">to continue to MITS Portal (demo sign-in)</p>' +
+    '<button class="opt" style="margin-top:1rem" onclick="pickGoogle(\'student\')"><span class="ol">S</span><span><b>Sanidhya Sharma</b><br/><span class="muted small">26mc1sa112@mitsgwl.ac.in · Student</span></span></button>' +
+    '<button class="opt" style="margin-top:.6rem" onclick="pickGoogle(\'faculty\')"><span class="ol">D</span><span><b>Dr. Divya</b><br/><span class="muted small">divya@mitsgwalior.in · Faculty</span></span></button>' +
+    '<p class="tiny muted" style="margin-top:1rem">On the real AMS this button opens Google sign-in. Here it opens the matching demo account — nothing is sent anywhere.</p>');
+});
+function pickGoogle(role){ closeModal(); if(role==="student") signIn("student", STUDENT.name, STUDENT.email); else signIn("faculty", FACULTY_DEMO.name, FACULTY_DEMO.email); }
+$("emailForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var em = $("loginEmail").value.trim().toLowerCase();
+  if(!em) return loginError("Enter your institute email to continue.");
+  if(em.endsWith("@mitsgwl.ac.in")){ loginError(""); signIn("student", STUDENT.name, em); }
+  else if(em.endsWith("@mitsgwalior.in")){ loginError(""); signIn("faculty", FACULTY_DEMO.name, em); }
+  else loginError("That doesn't look like an institute account. Students use @mitsgwl.ac.in and faculty use @mitsgwalior.in — or use a demo account above.");
+});
+function signOut(){
+  state.user = null;
+  $("appView").style.display="none"; $("loginView").style.display="flex";
+  window.scrollTo(0,0);
+}
+
+/* ================= NAV & ROUTER ================= */
+var ICONS = {
+  dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 1 1 3.4 2.5c-.8.3-.9 1-.9 1.7"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20c-.6-2.6-2.2-4.2-4.5-4.8"/></svg>',
+  dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5"/><path d="M4 19h16"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 17l-5.4 2.8 1.1-6.1L3.2 9.4l6.1-.8z"/></svg>',
+  lib:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v16M4 4h5v16H4zM9 4l5-1.5L17.5 18 12.5 19.5z"/></svg>',
+  form:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>',
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg>',
+  pulse:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2.5-6 4 12L16 12h5"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
+  task:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 5l1 1 2-2M4 11l1 1 2-2M4 17l1 1 2-2"/></svg>',
+  plan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 14h4M7 17h7"/></svg>',
+  code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>'
+};
+function unreadNotices(){ return DB.notices.filter(function(n){ return DB.mine.readNotices.indexOf(n.id)<0; }).length; }
+function overdueCount(){ var t=todayISO(); return DB.mine.assignments.filter(function(a){ return !a.done && a.due < t; }).length; }
+function buildNav(){
+  var items;
+  if(state.user.role==="faculty"){
+    items = [
+      ["", [["f-dash","Faculty Dashboard",ICONS.dash],["f-attend","Mark Attendance",ICONS.check],["f-quiz","Create Quiz",ICONS.quiz],["f-notice","Post Notice",ICONS.bell],["f-material","Course Materials",ICONS.dl],["f-results","Publish Results",ICONS.chart]]],
+      ["SHARED", [["notices","Notices",ICONS.bell,unreadNotices()],["calendar","Academic Calendar",ICONS.cal],["schemes","Schemes",ICONS.lib],["developer","Developer",ICONS.code],["profile","My Profile",ICONS.users]]]
+    ];
+  } else {
+    items = [
+      ["", [["dashboard","Dashboard",ICONS.dash],["courses","My Courses",ICONS.book],["attendance","Attendance & Bunks",ICONS.check],["quizzes","Quizzes",ICONS.quiz, DB.quizzes.filter(function(q){return q.status==="Pending";}).length + DB.mine.myQuizzes.length],["timetable","Timetable",ICONS.clock]]],
+      ["STUDY", [["academics","Academics",ICONS.chart],["assignments","Assignments",ICONS.task,overdueCount()],["planner","Study Planner",ICONS.plan],["mentoring","Mentoring",ICONS.users]]],
+      ["CAMPUS", [["notices","Notices",ICONS.bell,unreadNotices()],["calendar","Academic Calendar",ICONS.cal],["events","Campus Events",ICONS.star],["pulse","Campus Pulse",ICONS.pulse],["schemes","Schemes",ICONS.lib],["downloads","Downloads",ICONS.dl],["forms","Forms",ICONS.form]]],
+      ["", [["developer","Developer",ICONS.code],["profile","My Profile",ICONS.users]]]
+    ];
+  }
+  var html = "";
+  items.forEach(function(group){
+    if(group[0]) html += "<h5>"+group[0]+"</h5>";
+    group[1].forEach(function(it){
+      html += '<a href="#" data-go="'+it[0]+'" class="'+(state.view===it[0]?"on":"")+'">'+it[2]+esc(it[1])+(it[3]?'<span class="nb">'+it[3]+"</span>":"")+"</a>";
+    });
+  });
+  $("nav").innerHTML = html;
+  Array.prototype.forEach.call($("nav").querySelectorAll("a"), function(a){
+    a.addEventListener("click", function(e){ e.preventDefault(); go(a.getAttribute("data-go")); closeSidebar(); });
+  });
+}
+function closeSidebar(){ $("sidebar").classList.remove("open"); $("scrim").classList.remove("on"); }
+$("menuBtn").addEventListener("click", function(){ $("sidebar").classList.add("open"); $("scrim").classList.add("on"); });
+$("scrim").addEventListener("click", closeSidebar);
+$("profileBtn").addEventListener("click", function(){ go("profile"); });
+
+var RENDER = {};
+function go(view, param){
+  if(state.attempt && view!=="quiz-take"){ /* leaving a live quiz keeps it running in background state */ }
+  state.view = view;
+  if(param && param.courseId) state.courseId = param.courseId;
+  if(param && param.quizId) state.quizId = param.quizId;
+  buildNav();
+  var fn = RENDER[view];
+  $("view").innerHTML = fn ? fn() : '<div class="empty"><b>Page not found</b>Try the menu.</div>';
+  if(RENDER[view+"_init"]) RENDER[view+"_init"]();
+  window.scrollTo(0,0);
+}
+
+/* ================= GLOBAL SEARCH ================= */
+$("globalSearch").addEventListener("input", function(){
+  var q = this.value.trim().toLowerCase(), box = $("searchResults");
+  if(q.length<2){ box.classList.add("hidden"); box.innerHTML=""; return; }
+  var hits = [];
+  DB.courses.forEach(function(c){ if(c.name.toLowerCase().indexOf(q)>=0) hits.push({k:"Course", t:c.name, go:function(){ go("course",{courseId:c.id}); }}); });
+  DB.quizzes.concat(DB.mine.myQuizzes).forEach(function(z){ if(z.title.toLowerCase().indexOf(q)>=0) hits.push({k:"Quiz", t:z.title+" · "+(courseById(z.courseId)||{name:"My quizzes"}).name, go:function(){ openQuiz(z.id); }}); });
+  DB.notices.forEach(function(n){ if(n.title.toLowerCase().indexOf(q)>=0) hits.push({k:"Notice", t:n.title, go:function(){ go("notices"); }}); });
+  DB.schemes.forEach(function(s){ if((s.title+s.branch).toLowerCase().indexOf(q)>=0) hits.push({k:"Scheme", t:s.title, go:function(){ go("schemes"); }}); });
+  if(!hits.length){ box.innerHTML = '<div style="padding:.8rem" class="muted small">No matches for “'+esc(q)+'”.</div>'; box.classList.remove("hidden"); return; }
+  box.innerHTML = "";
+  hits.slice(0,8).forEach(function(h){
+    var b = document.createElement("button");
+    b.innerHTML = '<span class="k">'+h.k+'</span><span>'+esc(h.t)+"</span>";
+    b.addEventListener("click", function(){ box.classList.add("hidden"); $("globalSearch").value=""; h.go(); });
+    box.appendChild(b);
+  });
+  box.classList.remove("hidden");
+});
+document.addEventListener("click", function(e){ if(!$("globalSearch").contains(e.target) && !$("searchResults").contains(e.target)) $("searchResults").classList.add("hidden"); });
+
+/* ================= DASHBOARD ================= */
+function monthCalHTML(y, m, highlightISO){
+  var first = new Date(y, m, 1), startDay = (first.getDay()+6)%7, days = new Date(y, m+1, 0).getDate();
+  var calDates = {};
+  DB.calendar.sem1.concat(DB.calendar.sem2, DB.mine.myEvents).forEach(function(e){ calDates[e.date]=true; });
+  var h = '<div class="cal"><span class="dow">Mo</span><span class="dow">Tu</span><span class="dow">We</span><span class="dow">Th</span><span class="dow">Fr</span><span class="dow">Sa</span><span class="dow">Su</span>';
+  for(var i=0;i<startDay;i++) h += '<span class="d"></span>';
+  for(var d=1; d<=days; d++){
+    var iso = y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+    h += '<span class="d'+(iso===highlightISO?" today":"")+(calDates[iso]?" has":"")+'">'+d+"</span>";
+  }
+  return h + "</div>";
+}
+RENDER.dashboard = function(){
+  var low = DB.courses.map(function(c){ return {c:c, b:bunkInfo(c.attended,c.total)}; }).filter(function(x){ return x.b.pct<75; }).sort(function(a,b){ return a.b.pct-b.b.pct; });
+  var cd = examCountdown();
+  var pending = DB.quizzes.filter(function(q){ return q.status==="Pending"; }).length + DB.mine.myQuizzes.length;
+  var h = "";
+  h += '<section class="hero"><h1>Welcome back, Sanidhya</h1>' +
+    '<p>B.Tech. Artificial Intelligence &amp; Data Science · Semester 1 · Section H — here is your day at a glance.</p>' +
+    '<div class="row"><button class="btn amber" onclick="go(\'attendance\')">View Full Attendance</button>' +
+    '<span class="countdown-chip">Major Evaluations · ' + (cd.live ? "<b>Started</b>" : "<b>"+cd.d+"d "+cd.h+"h "+cd.m+"m</b> to go") + '</span></div></section>';
+  if(low.length){
+    h += '<div class="alert-strip red mt"><span style="font-size:1.2rem">⚠</span><div><b>Low attendance alert:</b> ' +
+      low.map(function(x){ return esc(x.c.name)+" ("+x.b.pct+"%)"; }).join(", ") +
+      ' — below the 75% line. <a href="#" onclick="go(\'attendance\');return false"><b>See the bunk predictor →</b></a></div></div>';
+  }
+  var od = overdueCount();
+  if(od) h += '<div class="alert-strip amber mt"><span style="font-size:1.2rem">⏰</span><div><b>'+od+' assignment'+(od>1?"s":"")+' overdue.</b> <a href="#" onclick="go(\'assignments\');return false">Open the tracker →</a></div></div>';
+  h += '<div class="grid g4 mt">' +
+    statCard("Total Attendance", "67.4%", "AMS headline snapshot · per-course records inside", "attendance") +
+    statCard("Upcoming Quizzes", String(pending), "Pending across your courses", "quizzes") +
+    statCard("Ongoing Courses", "10", "Semester 1 · all active", "courses") +
+    '<div class="stat"><div class="k">Semester Progress</div><div class="v num">64%</div><div class="progress amber"><i style="width:64%"></i></div><div class="s" style="margin-top:.35rem">Session 2026–27 · Sem 1</div></div>' +
+    "</div>";
+  h += '<div class="grid mt" style="grid-template-columns:1.5fr 1fr">';
+  h += '<div class="card"><h3>Today\'s Classes</h3><p class="tiny muted">Saturday · 21 Nov 2026</p>' +
+    '<div class="class-row"><div class="timebox">10:00–<br/>11:00 AM</div><div><b>Human Values &amp; Ethics</b><br/><span class="muted small">Amrita Singh · Room J010 · Lecture</span></div><span class="chip green" style="margin-left:auto">Today</span></div>' +
+    '<h3 style="margin-top:1.1rem">Upcoming Classes · Next 7 Days</h3>' +
+    '<div class="class-row"><div class="timebox">Mon 23 Nov<br/>10:00–11:00</div><div><b>Engineering Mechanics</b><br/><span class="muted small">Dr. Shubham Sharma · Room J008</span></div></div>' +
+    '<div class="class-row"><div class="timebox">Mon 23 Nov<br/>11:00–12:00</div><div><b>Engineering Mechanics</b><br/><span class="muted small">Dr. Shubham Sharma · Room J008</span></div></div>' +
+    '<div class="class-row"><div class="timebox">Tue 24 Nov<br/>4:00–5:00 PM</div><div><b>Introduction to Computing</b><br/><span class="muted small">Dr. Divya · Room J010</span></div></div>' +
+    '<div style="margin-top:.8rem"><button class="btn sm" onclick="go(\'timetable\')">Full weekly timetable →</button></div></div>';
+  h += '<div class="card"><h3>November 2026</h3><p class="tiny muted">Semester calendar · amber ring = event day</p><div style="margin-top:.6rem">' + monthCalHTML(2026,10,"2026-11-21") + '</div>' +
+    '<div class="tiny muted" style="margin-top:.6rem">23 Nov — Major Evaluations begin</div></div>';
+  h += "</div>";
+  h += '<div class="grid g2 mt"><div class="card"><div class="spread"><h3>Courses With Low Attendance</h3><button class="btn sm ghost" onclick="go(\'attendance\')">Bunk predictor →</button></div>' +
+    '<div class="class-row"><div style="flex:1"><b>Data Science &amp; Its Applications</b><div class="progress red" style="margin-top:.35rem"><i style="width:33.3%"></i></div></div><b class="num" style="color:var(--bad);font-size:1.15rem">33.3%</b></div>' +
+    low.slice(0,3).map(function(x){
+      return '<div class="class-row"><div style="flex:1"><b>'+esc(x.c.name)+'</b><div class="progress" style="margin-top:.35rem"><i style="width:'+x.b.pct+'%;background:'+attColor(x.b.pct)+'"></i></div></div><b class="num" style="font-size:1.15rem;color:'+attColor(x.b.pct)+'">'+x.b.pct+'%</b><button class="btn sm" onclick="go(\'course\',{courseId:\''+x.c.id+'\'})">View course</button></div>';
+    }).join("") + "</div>";
+  var unread = unreadNotices();
+  h += '<div class="card"><div class="spread"><h3>Latest Notices</h3><button class="btn sm ghost" onclick="go(\'notices\')">All notices →</button></div>' +
+    (unread? '<p class="small"><span class="chip red">'+unread+' unread</span></p>' : "") +
+    DB.notices.slice(0,3).map(function(n){
+      var ex = expiryInfo(n);
+      return '<div class="class-row"><div style="flex:1"><b style="font-size:.94rem">'+esc(n.title)+'</b><br/><span class="muted small">'+esc(n.cat)+' · '+fmtDate(n.date)+' · '+ex.soon+'</span></div></div>';
+    }).join("") + "</div></div>";
+  return h;
+};
+function statCard(k, v, s, dest){
+  return '<div class="stat" style="cursor:pointer" onclick="go(\''+dest+'\')"><div class="k">'+k+'</div><div class="v num">'+v+'</div><div class="s">'+s+'</div></div>';
+}
+</script>
+
+<script>
+/* ================= COURSES ================= */
+RENDER.courses = function(){
+  var h = '<div class="page-head"><h1>My Courses</h1><p>Semester 1 · 10 ongoing courses · attendance from your AMS course records</p></div><div class="grid g3">';
+  DB.courses.forEach(function(c){
+    var p = pct(c.attended, c.total), b = bunkInfo(c.attended, c.total);
+    h += '<div class="course-card" onclick="go(\'course\',{courseId:\''+c.id+'\'})">' +
+      '<div class="spread"><h3>'+esc(c.name)+'</h3><span class="chip '+(p>=75?"green":p>=60?"amber":"red")+'">'+(p>=75?"Safe":p>=60?"Borderline":"At risk")+'</span></div>' +
+      '<div class="muted small">'+(c.faculty? esc(c.faculty)+" · ":"")+(c.room? "Room "+esc(c.room) : "Schedule on course page")+'</div>' +
+      '<div class="row" style="gap:1rem"><div><div class="att-big num" style="color:'+attColor(p)+'">'+p+'%</div><div class="tiny muted">'+c.attended+' of '+c.total+' classes attended</div></div>' +
+      '<div style="margin-left:auto;text-align:right"><b class="num">'+(b.need? b.need+" classes needed" : b.safe+" safe bunks")+'</b><div class="tiny muted">to hold 75%</div></div></div>' +
+      '<div class="progress"><i style="width:'+p+'%;background:'+attColor(p)+'"></i></div></div>';
+  });
+  return h + "</div>";
+};
+
+var COURSE_TABS = [["info","Course Info"],["marks","Marks"],["materials","Course Materials"],["plan","Lecture Plan"],["schedule","Class Schedule"],["quiz","Quiz"],["notes","AI Notes Notebook"],["support","Student Support"]];
+RENDER.course = function(){
+  var c = courseById(state.courseId) || DB.courses[0]; state.courseId = c.id;
+  var p = pct(c.attended, c.total), b = bunkInfo(c.attended, c.total);
+  var h = '<button class="btn sm ghost no-print" onclick="go(\'courses\')">← All courses</button>' +
+    '<div class="spread" style="margin:.6rem 0 1rem"><div><h1 style="font-family:var(--display);font-size:1.6rem">'+esc(c.name)+'</h1>' +
+    '<p class="muted small" style="margin-top:.2rem">'+(c.faculty? "Faculty: "+esc(c.faculty)+" · ":"")+(c.room? "Room "+esc(c.room)+" · ":"")+'Semester 1</p></div>' +
+    '<div class="row"><div class="ring">'+ringSVG(p,84)+'<div class="rv"><b class="num">'+p+'%</b><span>Present</span></div></div>' +
+    '<div><b class="num" style="font-size:1.05rem">'+c.attended+' / '+c.total+'</b><div class="tiny muted">classes attended</div>' +
+    '<div class="small" style="margin-top:.3rem">'+(b.need? '<span class="chip red">Attend next '+b.need+' to reach 75%</span>' : '<span class="chip green">'+b.safe+' safe bunks left</span>')+'</div></div></div></div>';
+  h += '<div class="tabs no-print">' + COURSE_TABS.map(function(t){ return '<button class="'+(state.courseTab===t[0]?"on":"")+'" onclick="setCourseTab(\''+t[0]+'\')">'+t[1]+"</button>"; }).join("") + "</div>";
+  h += '<div id="courseTabBody">' + courseTabHTML(c) + "</div>";
+  return h;
+};
+function setCourseTab(t){ state.courseTab = t; go("course", {courseId: state.courseId}); }
+
+function courseTabHTML(c){
+  var t = state.courseTab;
+  if(t==="info"){
+    var h = '<div class="grid g2"><div class="card"><h3>Monthly Attendance</h3><p class="tiny muted">Day-by-day record · <span style="color:var(--good)">●</span> Present · <span style="color:var(--bad)">●</span> Absent</p><div class="grid" style="gap:.8rem;margin-top:.8rem">';
+    c.months.forEach(function(mo){
+      var sess = c.sessions.filter(function(s){ var d=new Date(s.date+"T00:00:00"); return d.getMonth()==={Aug:7,Sep:8,Oct:9,Nov:10}[mo.m] && d.getFullYear()===mo.y; });
+      h += '<div class="month-blk"><h4>'+mo.m+' '+mo.y+' <span>'+pct(mo.attended,mo.total)+'% · '+mo.attended+'/'+mo.total+'</span></h4><div class="dotgrid" style="margin-top:.5rem">' +
+        sess.map(function(s){ return '<span class="dot '+(s.present?"p":"a")+'" title="'+fmtDate(s.date)+" — "+(s.present?"Present":"Absent")+'"></span>'; }).join("") + "</div></div>";
+    });
+    h += '</div></div><div class="card"><h3>Session Record</h3><div style="max-height:430px;overflow-y:auto"><table class="tbl"><thead><tr><th>Date</th><th>Day</th><th>Time</th><th>Status</th></tr></thead><tbody>';
+    var rev = c.sessions.slice().reverse();
+    rev.forEach(function(s){
+      h += "<tr><td>"+fmtDate(s.date)+"</td><td>"+dayName(s.date)+"</td><td>"+(c.slots.length? c.slots[0].t.split("–")[0]+" onwards" : "—")+'</td><td>'+(s.present? '<span class="chip green">Present</span>' : '<span class="chip red">Absent</span>')+"</td></tr>";
+    });
+    h += "</tbody></table></div></div></div>";
+    return h;
+  }
+  if(t==="marks"){
+    if(!c.marks.length) return '<div class="empty"><b>No marks published yet</b>Exam and quiz marks for this course will appear here when faculty publish them.</div>';
+    var h = '<div class="card"><h3>Marks · '+esc(c.name)+'</h3><table class="tbl" style="margin-top:.6rem"><thead><tr><th>Exam</th><th>Your Score</th><th>Percentage</th><th>Class Average</th><th>Status</th></tr></thead><tbody>';
+    c.marks.forEach(function(m){
+      var pc = Math.round(m.score/m.max*100);
+      h += "<tr><td><b>"+esc(m.exam)+"</b></td><td class='num'><b>"+m.score+"</b> / "+m.max+"</td><td class='num'>"+pc+'%</td><td class="num">'+m.avg+'%</td><td><span class="chip green">'+esc(m.status)+"</span></td></tr>";
+    });
+    return h + "</tbody></table></div>";
+  }
+  if(t==="materials"){
+    if(!c.materials.length) return '<div class="empty"><b>No course materials yet</b>Files shared by faculty for this course will appear here.</div>';
+    var h = '<div class="card"><h3>Course Materials</h3><div style="margin-top:.5rem">';
+    c.materials.forEach(function(m, i){
+      h += '<div class="class-row"><div style="flex:1"><b>'+esc(m.name)+'</b><br/><span class="muted small">'+esc(m.type)+'</span></div>' +
+        '<button class="btn sm" onclick="viewMaterial(\''+c.id+'\','+i+')">View</button><button class="btn sm primary" onclick="dlMaterial(\''+c.id+'\','+i+')">Download</button></div>';
+    });
+    return h + "</div></div>";
+  }
+  if(t==="plan"){
+    if(!c.plan.length) return '<div class="empty"><b>Lecture plan not published</b>The lecture plan for this course has not been shared yet.</div>';
+    return '<div class="card"><h3>Lecture Plan</h3><div style="margin-top:.5rem">' + c.plan.map(function(u,i){
+      return '<div class="checkline"><span class="chip '+(i<2?"green":"")+'">Unit '+(i+1)+'</span><span>'+esc(u.split("·")[1]||u)+"</span></div>";
+    }).join("") + "</div></div>";
+  }
+  if(t==="schedule"){
+    if(!c.slots.length) return '<div class="empty"><b>Schedule not published in AMS</b>Weekly slots for this course were not listed. See the <a href="#" onclick="go(\'timetable\');return false">timetable</a> for the slots that are known.</div>';
+    var h = '<div class="card"><h3>Weekly Class Schedule</h3><table class="tbl" style="margin-top:.6rem"><thead><tr><th>Day</th><th>Time</th><th>Room</th><th>Faculty</th></tr></thead><tbody>';
+    c.slots.forEach(function(s){ h += "<tr><td><b>"+s.d+"</b></td><td>"+s.t+"</td><td>"+(c.room||"—")+"</td><td>"+(c.faculty||"—")+"</td></tr>"; });
+    return h + "</tbody></table></div>";
+  }
+  if(t==="quiz"){ return quizListHTML(c.id); }
+  if(t==="notes"){ return notesHTML(c); }
+  if(t==="support"){
+    return '<div class="grid g2"><div class="card"><h3>Student Support</h3><p class="muted small">Raise a doubt or request for this course. Your messages are saved here on your device.</p>' +
+      '<div class="field" style="margin-top:.8rem"><label>Your message</label><textarea class="ta" id="supportMsg" placeholder="e.g. Please share the Unit 3 practice problems…"></textarea></div>' +
+      '<button class="btn primary" onclick="sendSupport(\''+c.id+'\')">Send to faculty</button>' +
+      '<div id="supportList" style="margin-top:1rem">' + supportListHTML(c.id) + "</div></div>" +
+      '<div class="card"><h3>Course Faculty</h3><p style="margin-top:.5rem"><b>'+(c.faculty||"Not listed")+'</b></p><p class="muted small">'+(c.room? "Room "+esc(c.room)+" · " : "")+'Office hours: after scheduled classes, or raise a request here.</p></div></div>';
+  }
+  return "";
+}
+function supportListHTML(cid){
+  var list = DB.mine.support.filter(function(s){ return s.courseId===cid; });
+  if(!list.length) return '<p class="muted small">No messages yet.</p>';
+  return list.slice().reverse().map(function(s){ return '<div class="class-row"><div><b class="small">'+esc(s.msg)+'</b><br/><span class="tiny muted">'+esc(s.when)+' · Sent</span></div></div>'; }).join("");
+}
+function sendSupport(cid){
+  var v = $("supportMsg").value.trim(); if(!v) return toast("Write a message first.");
+  DB.mine.support.push({courseId:cid, msg:v, when:new Date().toLocaleString("en-IN",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})});
+  save(); go("course",{courseId:cid}); toast("Message saved — visible to faculty in the full AMS.");
+}
+function viewMaterial(cid, i){
+  var c = courseById(cid), m = c.materials[i];
+  modal('<h3>'+esc(m.name)+'</h3><p class="muted small">'+esc(c.name)+' · '+esc(m.type)+'</p><div class="empty" style="margin:1rem 0"><b>Preview</b>Document preview renders in the full portal. Use Download to save a copy of this file record.</div><div class="row"><button class="btn primary" onclick="dlMaterial(\''+cid+'\','+i+')">Download</button><button class="btn" onclick="closeModal()">Close</button></div>');
+}
+function dlMaterial(cid, i){
+  var c = courseById(cid), m = c.materials[i];
+  downloadText(m.name.replace(/[^a-z0-9]+/gi,"-") + ".txt", m.name + "\nCourse: " + c.name + "\nType: " + m.type + "\n\n(This is the file record saved from MITS Portal. In the full deployment this downloads the original document.)");
+  toast("Downloading " + m.name);
+}
+
+/* notes notebook */
+function notesHTML(c){
+  var n = DB.mine.notes[c.id] || {lecture:"", summary:"", qa:"", diagrams:""};
+  var tabs = [["lecture","Lecture Notes"],["summary","Summary Points"],["qa","Q&A Prep"],["diagrams","Diagrams"]];
+  var cur = state.notesTab || "lecture";
+  var h = '<div class="card"><div class="spread"><h3>AI Notes Notebook · '+esc(c.name)+'</h3><button class="btn sm no-print" onclick="printNotes(\''+c.id+'\')">Print Notes</button></div>' +
+    '<p class="muted small">Your working notebook for this course — write, revise and print. Everything saves automatically on this device.</p>' +
+    '<div class="pill-tabs" style="margin:.8rem 0">' + tabs.map(function(t){ return '<button class="'+(cur===t[0]?"on":"")+'" onclick="setNotesTab(\''+t[0]+'\')">'+t[1]+"</button>"; }).join("") + "</div>" +
+    '<textarea class="ta" id="notesArea" style="min-height:220px" placeholder="Start writing your '+tabs.find(function(x){return x[0]===cur;})[1].toLowerCase()+' here…">'+esc(n[cur]||"")+'</textarea>' +
+    '<div class="row" style="margin-top:.7rem"><button class="btn primary" onclick="saveNotes(\''+c.id+'\')">Save notes</button><span class="tiny muted">Saved notes appear here every time you open this course.</span></div></div>';
+  return h;
+}
+function setNotesTab(t){ state.notesTab = t; var c = courseById(state.courseId); $("courseTabBody").innerHTML = notesHTML(c); }
+function saveNotes(cid){
+  if(!DB.mine.notes[cid]) DB.mine.notes[cid] = {lecture:"",summary:"",qa:"",diagrams:""};
+  DB.mine.notes[cid][state.notesTab||"lecture"] = $("notesArea").value;
+  save(); toast("Notes saved on this device.");
+}
+function printNotes(cid){
+  var c = courseById(cid), n = DB.mine.notes[cid] || {};
+  var pa = $("printArea");
+  pa.innerHTML = "<h1>"+esc(c.name)+" — Notes</h1>" + ["lecture","summary","qa","diagrams"].map(function(k){
+    return "<h3>"+k.toUpperCase()+"</h3><p style='white-space:pre-wrap'>"+esc(n[k]||"—")+"</p>";
+  }).join("");
+  pa.classList.remove("hidden");
+  document.querySelector(".content").style.display="none";
+  setTimeout(function(){ window.print(); pa.classList.add("hidden"); document.querySelector(".content").style.display=""; }, 60);
+}
+
+/* ================= ATTENDANCE & BUNK PREDICTOR ================= */
+RENDER.attendance = function(){
+  var h = '<div class="page-head"><h1>Attendance &amp; Bunk Predictor</h1><p>Per-course records from AMS (faculty-marked, read-only) — plus the predictor AMS doesn\'t have: safe bunks and classes needed to hold 75%.</p></div>';
+  var low = DB.courses.filter(function(c){ return pct(c.attended,c.total)<75; });
+  if(low.length) h += '<div class="alert-strip red mb"><span style="font-size:1.2rem">⚠</span><div><b>'+low.length+' course'+(low.length>1?"s":"")+' below 75%:</b> '+low.map(function(c){ return esc(c.name)+" ("+pct(c.attended,c.total)+"%)"; }).join(", ")+"</div></div>";
+  h += '<div class="card" style="padding:.4rem 1.1rem"><table class="tbl"><thead><tr><th>Course</th><th>Attendance</th><th>Attended</th><th>Safe Bunks</th><th>Needed for 75%</th><th>Status</th><th></th></tr></thead><tbody>';
+  DB.courses.forEach(function(c){
+    var b = bunkInfo(c.attended, c.total);
+    h += "<tr><td><b>"+esc(c.name)+"</b></td>" +
+      '<td><span class="row" style="gap:.5rem;flex-wrap:nowrap"><span class="progress" style="width:90px"><i style="width:'+b.pct+'%;background:'+attColor(b.pct)+'"></i></span><b class="num">'+b.pct+'%</b></span></td>' +
+      "<td class='num'>"+c.attended+" / "+c.total+"</td>" +
+      '<td class="num">'+(b.safe? "<b style='color:var(--good)'>"+b.safe+"</b>" : "0")+"</td>" +
+      '<td class="num">'+(b.need? "<b style='color:var(--bad)'>Attend "+b.need+" in a row</b>" : "—")+"</td>" +
+      "<td>"+(b.pct>=75? '<span class="chip green">Safe</span>' : b.pct>=60? '<span class="chip amber">Borderline</span>' : '<span class="chip red">At risk</span>')+"</td>" +
+      '<td><button class="btn sm" onclick="go(\'course\',{courseId:\''+c.id+'\'})">Course</button></td></tr>';
+  });
+  h += "</tbody></table></div>";
+  h += '<div class="card mt"><h3>How the predictor works</h3><p class="muted small">Safe bunks = classes you can miss while staying at or above 75%: floor(attended ÷ 0.75 − total). Classes needed = consecutive classes to attend to climb back to 75%: ceil((0.75 × total − attended) ÷ 0.25). Figures use your per-course AMS records; the dashboard\'s 67.4% is the AMS headline snapshot and can differ from the per-course sum.</p></div>';
+  return h;
+};
+</script>
+
+<script>
+/* ================= QUIZZES ================= */
+function allQuizzes(){ return DB.quizzes.concat(DB.mine.myQuizzes); }
+function quizById(id){ return allQuizzes().find(function(q){ return q.id===id; }); }
+function openQuiz(id){
+  var q = quizById(id); if(!q) return;
+  if(q.status==="Completed") go("quiz-result", {quizId:id});
+  else startQuiz(id);
+}
+RENDER.quizzes = function(){
+  var h = '<div class="page-head"><h1>Quizzes</h1><p>All courses · timed attempts are auto-graded with answer review</p></div>';
+  h += '<div class="row mb"><input id="quizSearch" type="search" placeholder="Search quizzes…" style="flex:1;min-width:200px;border:1px solid var(--line2);border-radius:999px;padding:.55rem 1rem;background:var(--card)" value="'+esc(state.quizSearch||"")+'" />' +
+    '<button class="btn amber" onclick="openQuizCreator()">+ Create Practice Quiz</button></div>';
+  h += '<div class="pill-tabs mb" id="quizFilters">' + ["All","Completed","Pending","Missed"].map(function(f){
+    return '<button class="'+(state.quizFilter===f?"on":"")+'" onclick="setQuizFilter(\''+f+'\')">'+f+"</button>"; }).join("") + "</div>";
+  h += '<div id="quizList">' + quizCardsHTML() + "</div>";
+  return h;
+};
+RENDER.quizzes_init = function(){
+  $("quizSearch").addEventListener("input", function(){ state.quizSearch = this.value; $("quizList").innerHTML = quizCardsHTML(); });
+};
+function setQuizFilter(f){ state.quizFilter = f; go("quizzes"); }
+function quizCardsHTML(onlyCourse){
+  var q = (state.quizSearch||"").toLowerCase();
+  var list = allQuizzes().filter(function(z){
+    if(onlyCourse && z.courseId!==onlyCourse) return false;
+    if(state.quizFilter!=="All" && z.status!==state.quizFilter) return false;
+    if(!onlyCourse && q && z.title.toLowerCase().indexOf(q)<0 && (courseById(z.courseId)||{name:""}).name.toLowerCase().indexOf(q)<0) return false;
+    if(onlyCourse && q && z.title.toLowerCase().indexOf(q)<0) return false;
+    return true;
+  });
+  if(!list.length) return '<div class="empty"><b>No quizzes here</b>Nothing matches this filter right now.</div>';
+  return '<div class="grid g2">' + list.map(function(z){
+    var c = courseById(z.courseId);
+    var badge = z.status==="Completed" ? '<span class="chip green">Completed</span>' : z.status==="Missed" ? '<span class="chip red">Missed</span>' : '<span class="chip amber">Pending</span>';
+    var mine = DB.mine.myQuizzes.indexOf(z)>=0;
+    return '<div class="quiz-card"><div class="spread"><b style="font-size:1.02rem">'+esc(z.title)+'</b>'+badge+'</div>' +
+      '<div class="muted small">'+(c? esc(c.name) : "My practice quiz")+(mine? ' · <span class="chip blue">Created by me</span>' : "")+'</div>' +
+      '<div class="qmeta"><span>📅 '+fmtDate(z.date)+' · '+esc(z.window)+'</span><span>'+z.marks+' marks</span><span>'+z.nq+' questions</span><span>'+z.dur+' min</span></div>' +
+      (z.status==="Completed" && z.result ? '<div class="small">Score: <b class="num">'+z.result.score+' / '+z.marks+'</b> ('+Math.round(z.result.score/z.marks*100)+'%)</div>' : "") +
+      '<div class="row"><button class="btn sm '+(z.status==="Completed"?"":"primary")+'" onclick="openQuiz(\''+z.id+'\')">'+(z.status==="Completed" ? "View Result" : "Start Quiz")+"</button>" +
+      (mine? '<button class="btn sm danger" onclick="deleteMyQuiz(\''+z.id+'\')">Delete</button>' : "") + "</div></div>";
+  }).join("") + "</div>";
+}
+function quizListHTML(courseId){
+  var list = allQuizzes().filter(function(z){ return z.courseId===courseId; });
+  var h = '<div class="row mb"><input type="search" placeholder="Search quizzes in this course…" style="flex:1;min-width:180px;border:1px solid var(--line2);border-radius:999px;padding:.5rem 1rem;background:var(--card)" oninput="state.quizSearch=this.value;document.getElementById(\'courseQuizList\').innerHTML=quizCardsHTML(\''+courseId+'\')" />' +
+    '<button class="btn amber sm" onclick="openQuizCreator(\''+courseId+'\')">+ Create Practice Quiz</button></div>' +
+    '<div class="pill-tabs mb">' + ["All","Completed","Pending","Missed"].map(function(f){ return '<button class="'+(state.quizFilter===f?"on":"")+'" onclick="state.quizFilter=\''+f+'\';document.getElementById(\'courseQuizList\').innerHTML=quizCardsHTML(\''+courseId+'\')">'+f+"</button>"; }).join("") + "</div>" +
+    '<div id="courseQuizList">' + quizCardsHTML(courseId) + "</div>";
+  return h;
+}
+function deleteMyQuiz(id){
+  DB.mine.myQuizzes = DB.mine.myQuizzes.filter(function(q){ return q.id!==id; }); save(); go(state.view); toast("Practice quiz deleted.");
+}
+
+/* ---- timed attempt ---- */
+var attemptTimer = null;
+function startQuiz(id){
+  var q = quizById(id); if(!q) return;
+  if(!q.questions || !q.questions.length){ toast("This quiz has no question paper loaded."); return; }
+  state.attempt = { quizId:id, idx:0, answers:q.questions.map(function(){ return -1; }), left:q.dur*60, startedAt:new Date() };
+  go("quiz-take", {quizId:id});
+}
+RENDER["quiz-take"] = function(){
+  var q = quizById(state.quizId), a = state.attempt;
+  if(!q || !a) return '<div class="empty"><b>No active attempt</b><button class="btn primary" onclick="go(\'quizzes\')">Back to quizzes</button></div>';
+  var cur = q.questions[a.idx];
+  var mm = String(Math.floor(a.left/60)).padStart(2,"0"), ss = String(a.left%60).padStart(2,"0");
+  var h = '<div class="spread mb"><div><h1 style="font-family:var(--display);font-size:1.4rem">'+esc(q.title)+'</h1><p class="muted small">'+esc((courseById(q.courseId)||{name:"Practice"}).name)+' · Question '+(a.idx+1)+' of '+q.questions.length+' · '+q.marks+' marks</p></div>' +
+    '<div class="timer num'+(a.left<=60?" low":"")+'" id="quizTimer">'+mm+":"+ss+"</div></div>";
+  h += '<div class="card"><h3 style="font-size:1.08rem">'+esc(cur.q)+'</h3><div class="grid" style="gap:.6rem;margin-top:1rem">';
+  cur.opts.forEach(function(o, i){
+    h += '<button class="opt'+(a.answers[a.idx]===i?" sel":"")+'" onclick="pickAnswer('+i+')"><span class="ol">'+"ABCD"[i]+'</span><span>'+esc(o)+"</span></button>";
+  });
+  h += '</div><div class="spread" style="margin-top:1.1rem"><button class="btn" '+(a.idx===0?"disabled":"")+' onclick="moveQ(-1)">← Previous</button>' +
+    '<button class="btn" onclick="clearAnswer()">Clear answer</button>' +
+    (a.idx<q.questions.length-1 ? '<button class="btn primary" onclick="moveQ(1)">Next →</button>' : '<button class="btn amber" onclick="submitQuiz(false)">Submit Quiz</button>') + "</div></div>";
+  h += '<div class="card mt"><h3 class="small" style="margin-bottom:.6rem">Question Navigator</h3><div class="qnav">' +
+    q.questions.map(function(_, i){ return '<button class="'+(a.answers[i]>=0?"done":"")+(i===a.idx?" cur":"")+'" onclick="jumpQ('+i+')">'+(i+1)+"</button>"; }).join("") +
+    '</div><div class="row" style="margin-top:1rem"><button class="btn amber" onclick="submitQuiz(false)">Submit Quiz</button><span class="tiny muted">Auto-submits when the timer ends. Answers are graded instantly.</span></div></div>';
+  return h;
+};
+RENDER["quiz-take_init"] = function(){
+  clearInterval(attemptTimer);
+  attemptTimer = setInterval(function(){
+    if(!state.attempt) { clearInterval(attemptTimer); return; }
+    state.attempt.left--;
+    var el = $("quizTimer");
+    if(el){ var a=state.attempt; el.textContent = String(Math.floor(Math.max(a.left,0)/60)).padStart(2,"0")+":"+String(Math.max(a.left,0)%60).padStart(2,"0"); if(a.left<=60) el.classList.add("low"); }
+    if(state.attempt.left<=0){ clearInterval(attemptTimer); submitQuiz(true); }
+  }, 1000);
+};
+function pickAnswer(i){ state.attempt.answers[state.attempt.idx]=i; refreshTake(); }
+function clearAnswer(){ state.attempt.answers[state.attempt.idx]=-1; refreshTake(); }
+function moveQ(d){ state.attempt.idx += d; refreshTake(); }
+function jumpQ(i){ state.attempt.idx = i; refreshTake(); }
+function refreshTake(){ var v = RENDER["quiz-take"](); $("view").innerHTML = v; }
+function submitQuiz(auto){
+  clearInterval(attemptTimer);
+  var a = state.attempt, q = quizById(a.quizId); if(!q) return;
+  var correct=0, wrong=0, skipped=0;
+  q.questions.forEach(function(qq, i){ if(a.answers[i]<0) skipped++; else if(a.answers[i]===qq.ans) correct++; else wrong++; });
+  var per = q.marks / q.questions.length;
+  var score = Math.round(correct*per*10)/10;
+  var takenSec = q.dur*60 - Math.max(a.left,0);
+  var res = { score:score, correct:correct, wrong:wrong, skipped:skipped,
+    timeTaken: Math.floor(takenSec/60)+" min "+(takenSec%60)+" sec",
+    start: a.startedAt.toLocaleString("en-IN",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}),
+    submit: new Date().toLocaleString("en-IN",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}),
+    answers: a.answers.slice(), auto: !!auto };
+  q.status = "Completed"; q.result = res;
+  DB.mine.attempts.push({ quizId:q.id, when: todayISO(), score:score, max:q.marks });
+  state.attempt = null;
+  save(); buildNav();
+  go("quiz-result", {quizId:q.id});
+  toast(auto ? "Time up — quiz auto-submitted." : "Quiz submitted and graded.");
+}
+
+/* ---- result & review ---- */
+RENDER["quiz-result"] = function(){
+  var q = quizById(state.quizId);
+  if(!q || !q.result) return '<div class="empty"><b>No result</b>This quiz has not been attempted yet.</div>';
+  var r = q.result, pc = Math.round(r.score/q.marks*100);
+  var h = '<button class="btn sm ghost" onclick="go(\'quizzes\')">← All quizzes</button>' +
+    '<div class="spread" style="margin:.7rem 0 1rem"><div><h1 style="font-family:var(--display);font-size:1.55rem">'+esc(q.title)+' — Result</h1><p class="muted small">'+esc((courseById(q.courseId)||{name:"Practice quiz"}).name)+' · '+fmtDate(q.date)+'</p></div>' +
+    '<div class="ring">'+ringSVG(pc,96)+'<div class="rv"><b class="num">'+pc+'%</b><span>Score</span></div></div></div>';
+  h += '<div class="grid g4">' +
+    stat2("Score", r.score+" / "+q.marks) + stat2("Correct", r.correct!=null? r.correct : "—") + stat2("Wrong", r.wrong!=null? r.wrong : "—") + stat2("Skipped", r.skipped!=null? r.skipped : "—") + "</div>";
+  h += '<div class="card mt"><table class="tbl"><tbody>' +
+    "<tr><td class='muted'>Time taken</td><td><b>"+esc(r.timeTaken||"—")+"</b> of "+q.dur+" min allowed</td></tr>" +
+    "<tr><td class='muted'>Started</td><td>"+esc(r.start||"—")+"</td></tr>" +
+    "<tr><td class='muted'>Submitted</td><td>"+esc(r.submit||"—")+"</td></tr>" +
+    (r.auto? "<tr><td class='muted'>Note</td><td>Auto-submitted when the timer ended.</td></tr>" : "") +
+    "</tbody></table></div>";
+  if(q.questions && q.questions.length && r.answers){
+    h += '<div class="card mt"><h3>Question Navigator</h3><div class="qnav" style="margin:.7rem 0">' +
+      q.questions.map(function(qq,i){ var cls = r.answers[i]<0 ? "" : (r.answers[i]===qq.ans ? "right" : "wrong"); return '<button class="'+cls+'" onclick="document.getElementById(\'rq'+i+'\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">'+(i+1)+"</button>"; }).join("") + "</div>" +
+      '<h3 style="margin-top:1rem">Review Answers</h3>' +
+      q.questions.map(function(qq,i){
+        var mine = r.answers[i];
+        return '<div id="rq'+i+'" style="padding:.9rem 0;border-bottom:1px solid var(--line)"><b>Q'+(i+1)+". "+esc(qq.q)+"</b>" +
+          '<div class="grid" style="gap:.45rem;margin-top:.55rem">' + qq.opts.map(function(o,oi){
+            var cls = oi===qq.ans ? "right" : (oi===mine && mine!==qq.ans ? "wrong" : "");
+            return '<div class="opt '+cls+'" style="cursor:default"><span class="ol">'+"ABCD"[oi]+"</span><span>"+esc(o)+(oi===qq.ans? ' <b>· Correct</b>' : "")+(oi===mine && mine!==qq.ans? ' <b>· Your answer</b>' : "")+(mine<0 && oi===0? '' : '')+"</span></div>";
+          }).join("") + "</div>" +
+          (mine<0? '<p class="small" style="color:var(--warn);margin-top:.4rem">You skipped this question.</p>' : "") +
+          '<p class="small muted" style="margin-top:.45rem"><b>Explanation:</b> '+esc(qq.why||"")+"</p></div>";
+      }).join("") + "</div>";
+  } else if(q.questions && q.questions.length){
+    h += '<div class="card mt"><h3>Review Answers</h3><p class="muted small">This attempt was recorded in AMS before this portal existed, so the per-question responses are not available here. Attempts you take in this portal get a full question-by-question review with explanations.</p></div>';
+  }
+  return h;
+};
+function stat2(k, v){ return '<div class="stat"><div class="k">'+k+'</div><div class="v num" style="font-size:1.6rem">'+v+"</div></div>"; }
+
+/* ---- quiz creator ---- */
+function openQuizCreator(courseId){
+  var opts = DB.courses.map(function(c){ return '<option value="'+c.id+'"'+(c.id===courseId?" selected":"")+">"+esc(c.name)+"</option>"; }).join("");
+  modal('<h3>Create a Practice Quiz</h3><p class="muted small">Your own quiz, saved on this device and kept separate from AMS quizzes. Add questions below — attempts are timed and auto-graded.</p>' +
+    '<div class="field" style="margin-top:1rem"><label>Quiz title</label><input id="cqTitle" placeholder="e.g. C Programming — Pointers Drill" /></div>' +
+    '<div class="grid g2"><div class="field"><label>Course</label><select id="cqCourse">'+opts+'</select></div>' +
+    '<div class="field"><label>Duration (minutes)</label><input id="cqDur" type="number" value="10" min="1" /></div></div>' +
+    '<div id="cqQuestions"></div>' +
+    '<button class="btn sm" onclick="addCreatorQuestion()">+ Add question</button>' +
+    '<div class="row" style="margin-top:1.1rem"><button class="btn primary" onclick="saveCreatedQuiz()">Save quiz</button><button class="btn" onclick="closeModal()">Cancel</button></div>', true);
+  addCreatorQuestion();
+}
+function addCreatorQuestion(){
+  var wrap = $("cqQuestions"), n = wrap.children.length;
+  var div = document.createElement("div");
+  div.className = "month-blk"; div.style.marginTop = ".8rem";
+  div.innerHTML = '<b class="small">Question '+(n+1)+'</b>' +
+    '<div class="field" style="margin-top:.5rem"><label>Question</label><input class="cq-q" placeholder="Type the question" /></div>' +
+    '<div class="grid g2">' + [0,1,2,3].map(function(i){ return '<div class="field"><label>Option '+"ABCD"[i]+'</label><input class="cq-o'+i+'" placeholder="Option '+"ABCD"[i]+'" /></div>'; }).join("") + "</div>" +
+    '<div class="grid g2"><div class="field"><label>Correct option</label><select class="cq-a"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>' +
+    '<div class="field"><label>Explanation (shown in review)</label><input class="cq-w" placeholder="Why is it correct?" /></div></div>';
+  wrap.appendChild(div);
+}
+function saveCreatedQuiz(){
+  var title = $("cqTitle").value.trim(); if(!title) return toast("Give your quiz a title.");
+  var qs = [];
+  Array.prototype.forEach.call($("cqQuestions").children, function(blk){
+    var q = blk.querySelector(".cq-q").value.trim(); if(!q) return;
+    qs.push({ q:q, opts:[0,1,2,3].map(function(i){ return blk.querySelector(".cq-o"+i).value.trim() || ("Option "+"ABCD"[i]); }),
+      ans: parseInt(blk.querySelector(".cq-a").value,10), why: blk.querySelector(".cq-w").value.trim() });
+  });
+  if(!qs.length) return toast("Add at least one question.");
+  var quiz = { id:"mine-"+Date.now(), courseId: $("cqCourse").value, title:title, date: todayISO(), window:"Any time", marks:qs.length, nq:qs.length,
+    dur: Math.max(1, parseInt($("cqDur").value,10)||10), status:"Pending", questions:qs };
+  DB.mine.myQuizzes.push(quiz); save(); closeModal(); buildNav(); go("quizzes"); toast("Practice quiz saved — find it in Quizzes.");
+}
+
+/* ================= ACADEMICS ================= */
+RENDER.academics = function(){
+  var tab = state.acadTab || "current";
+  var h = '<div class="page-head"><h1>Academics</h1><p>Academic performance, results, CGPA tools and your marks tracker</p></div>' +
+    '<div class="pill-tabs mb">' + [["current","Current Semester"],["sems","Semesters 1–8"],["cgpa","CGPA / SGPA Calculator"],["tracker","Marks Tracker"]].map(function(t){
+      return '<button class="'+(tab===t[0]?"on":"")+'" onclick="state.acadTab=\''+t[0]+'\';go(\'academics\')">'+t[1]+"</button>"; }).join("") + "</div>";
+  if(tab==="current"){
+    h += '<div class="spread mb"><h3>Semester 1 · 2026–27</h3><button class="btn sm" onclick="downloadResult()">Download Result</button></div>';
+    if(!DB.resultsPublished){
+      h += '<div class="empty"><b>No results available yet</b>Semester results have not been published by the institute. When faculty publish results, they will appear here automatically.</div>';
+    } else {
+      h += '<div class="card"><h3>Published Results</h3><table class="tbl" style="margin-top:.5rem"><thead><tr><th>Course</th><th>Exam</th><th>Score</th></tr></thead><tbody>' +
+        DB.courses.filter(function(c){ return c.marks.length; }).map(function(c){ return c.marks.map(function(m){ return "<tr><td>"+esc(c.name)+"</td><td>"+esc(m.exam)+"</td><td class='num'><b>"+m.score+"</b>/"+m.max+"</td></tr>"; }).join(""); }).join("") + "</tbody></table></div>";
+    }
+  }
+  if(tab==="sems"){
+    h += '<div class="grid g4">' + [1,2,3,4,5,6,7,8].map(function(s){
+      return '<div class="stat"><div class="k">Semester '+s+'</div><div class="v" style="font-size:1.15rem">'+(s===1? "In progress" : "Upcoming")+'</div><div class="s">'+(s===1? "Results not published yet" : "Starts after Semester "+(s-1))+"</div></div>";
+    }).join("") + "</div>";
+  }
+  if(tab==="cgpa"){
+    var rows = DB.mine.cgpaRows || [{subject:"Mathematics-I", credits:4, grade:8},{subject:"Introduction to Computing", credits:3, grade:9},{subject:"Engineering Physics", credits:4, grade:7}];
+    h += '<div class="card"><h3>SGPA / CGPA Calculator</h3><p class="muted small">Add your subjects with credits and grade points (10-point scale). SGPA = Σ(credits × grade point) ÷ Σcredits. Your entries save on this device.</p>' +
+      '<div id="cgpaRows" style="margin-top:.8rem">' + rows.map(cgpaRowHTML).join("") + "</div>" +
+      '<div class="row" style="margin-top:.8rem"><button class="btn sm" onclick="addCgpaRow()">+ Add subject</button><button class="btn sm primary" onclick="calcCgpa()">Calculate &amp; Save</button></div>' +
+      '<div id="cgpaOut" style="margin-top:1rem"></div></div>';
+  }
+  if(tab==="tracker"){
+    var rowsT = [];
+    DB.courses.forEach(function(c){ c.marks.forEach(function(m){ rowsT.push({course:c.name, exam:m.exam, score:m.score, max:m.max}); }); });
+    DB.mine.attempts.forEach(function(a){ var q=quizById(a.quizId); if(q) rowsT.push({course:(courseById(q.courseId)||{name:"Practice"}).name, exam:q.title+" (in-portal attempt)", score:a.score, max:a.max}); });
+    h += '<div class="card"><h3>Marks Tracker</h3><p class="muted small">Built automatically from your published course marks and every quiz you attempt in this portal.</p>';
+    if(!rowsT.length) h += '<div class="empty" style="margin-top:.8rem"><b>Nothing tracked yet</b>Take a quiz or wait for faculty to publish marks.</div>';
+    else {
+      h += '<table class="tbl" style="margin-top:.6rem"><thead><tr><th>Course</th><th>Assessment</th><th>Score</th><th>%</th></tr></thead><tbody>' +
+        rowsT.map(function(r){ return "<tr><td>"+esc(r.course)+"</td><td>"+esc(r.exam)+"</td><td class='num'><b>"+r.score+"</b>/"+r.max+"</td><td class='num'>"+Math.round(r.score/r.max*100)+"%</td></tr>"; }).join("") +
+        "</tbody></table>";
+    }
+    h += "</div>";
+  }
+  return h;
+};
+function cgpaRowHTML(r){
+  return '<div class="row cgpa-row" style="margin-bottom:.5rem"><input class="cg-s" placeholder="Subject" value="'+esc(r.subject||"")+'" style="flex:2;min-width:140px;border:1px solid var(--line2);border-radius:8px;padding:.45rem .6rem;background:var(--card)" />' +
+    '<input class="cg-c" type="number" min="1" max="10" placeholder="Credits" value="'+(r.credits||"")+'" style="width:90px;border:1px solid var(--line2);border-radius:8px;padding:.45rem .6rem;background:var(--card)" />' +
+    '<input class="cg-g" type="number" min="0" max="10" placeholder="Grade pt" value="'+(r.grade!=null?r.grade:"")+'" style="width:100px;border:1px solid var(--line2);border-radius:8px;padding:.45rem .6rem;background:var(--card)" />' +
+    '<button class="btn sm danger" onclick="this.parentElement.remove()">Remove</button></div>';
+}
+function addCgpaRow(){ $("cgpaRows").insertAdjacentHTML("beforeend", cgpaRowHTML({})); }
+function calcCgpa(){
+  var rows = [], tc=0, tp=0;
+  Array.prototype.forEach.call(document.querySelectorAll(".cgpa-row"), function(r){
+    var s=r.querySelector(".cg-s").value.trim(), c=parseFloat(r.querySelector(".cg-c").value), g=parseFloat(r.querySelector(".cg-g").value);
+    if(s && c>0 && !isNaN(g)){ rows.push({subject:s, credits:c, grade:g}); tc+=c; tp+=c*g; }
+  });
+  DB.mine.cgpaRows = rows; save();
+  var sgpa = tc? (tp/tc) : 0;
+  $("cgpaOut").innerHTML = rows.length ? '<div class="alert-strip amber"><div>Your SGPA: <b style="font-size:1.3rem">'+sgpa.toFixed(2)+'</b> · Equivalent percentage ≈ <b>'+(sgpa*9.5).toFixed(1)+'%</b> (× 9.5) · Total credits: '+tc+"</div></div>"
+    : '<p class="muted small">Add at least one subject with credits and a grade point.</p>';
+}
+function downloadResult(){
+  if(!DB.resultsPublished) return toast("No results available yet — nothing to download.");
+  makePDF(["MITS Gwalior — Semester 1 Result (Portal Copy)","","Student: Sanidhya Sharma","Roll No: 26MC1SA112","","Results as published by faculty in the portal."], "Result-Sem1.pdf");
+}
+</script>
+
+<script>
+/* ================= MENTORING ================= */
+RENDER.mentoring = function(){
+  var h = '<div class="page-head"><h1>Mentoring</h1><p>Your mentor, meeting log and a direct line for help</p></div><div class="grid g2">';
+  h += '<div class="card"><div class="row"><div class="avatar" style="width:56px;height:56px;font-size:1.05rem">SS</div><div><h3>Dr. Sunita Sharma</h3><p class="muted small">Assistant Professor<br/>Department of Humanities &amp; Management</p></div></div>' +
+    '<table class="tbl" style="margin-top:.8rem"><tbody>' +
+    "<tr><td class='muted'>Office</td><td>Room 10, Block E</td></tr>" +
+    "<tr><td class='muted'>Email</td><td><a href='mailto:sunita.sharma@mitsgwalior.in'>sunita.sharma@mitsgwalior.in</a></td></tr>" +
+    "<tr><td class='muted'>Mentee</td><td>Sanidhya Sharma · 26MC1SA112</td></tr>" +
+    "<tr><td class='muted'>Programme</td><td>B.Tech. AI &amp; Data Science · Sem 1 · Section H</td></tr></tbody></table>" +
+    '<div class="row" style="margin-top:1rem"><a class="btn primary" href="mailto:sunita.sharma@mitsgwalior.in">Email Mentor</a>' +
+    '<button class="btn danger" onclick="emergencyModal()">Emergency Contact</button></div></div>';
+  h += '<div class="card"><h3>Need Help?</h3><p class="muted small">Academic stress, attendance shortage, personal issues or anything affecting your studies — your mentor is the first point of contact. Log questions below so nothing is forgotten before your next meeting.</p>' +
+    '<div class="field" style="margin-top:.8rem"><label>Question for my mentor</label><div class="row"><input id="mentorQ" placeholder="e.g. How do I recover attendance in Mathematics-I?" style="flex:1;border:1px solid var(--line2);border-radius:8px;padding:.5rem .7rem;background:var(--card)" /><button class="btn primary" onclick="addMentorQ()">Add</button></div></div>' +
+    '<div id="mentorQList">' + mentorQListHTML() + "</div></div></div>";
+  h += '<div class="card mt"><div class="spread"><h3>Mentor Meeting Log</h3><button class="btn sm amber" onclick="addMeetingPrompt()">+ Log a meeting</button></div><div id="meetingList">' + meetingListHTML() + "</div></div>";
+  return h;
+};
+function mentorQListHTML(){
+  if(!DB.mine.questions.length) return '<p class="muted small">No questions saved yet.</p>';
+  return DB.mine.questions.slice().reverse().map(function(q, ri){
+    var i = DB.mine.questions.length-1-ri;
+    return '<div class="checkline"><input type="checkbox" '+(q.done?"checked":"")+' onchange="toggleMentorQ('+i+')" /><span style="flex:1" class="'+(q.done?"":"")+'">'+esc(q.text)+'</span><button class="btn sm danger" onclick="delMentorQ('+i+')">Delete</button></div>';
+  }).join("");
+}
+function addMentorQ(){ var v=$("mentorQ").value.trim(); if(!v) return; DB.mine.questions.push({text:v, done:false}); save(); go("mentoring"); toast("Question saved for your mentor."); }
+function toggleMentorQ(i){ DB.mine.questions[i].done = !DB.mine.questions[i].done; save(); }
+function delMentorQ(i){ DB.mine.questions.splice(i,1); save(); go("mentoring"); }
+function meetingListHTML(){
+  if(!DB.mine.mentorLog.length) return '<p class="muted small" style="margin-top:.5rem">No meetings logged yet. After you meet Dr. Sunita Sharma, record the date and what was discussed.</p>';
+  return DB.mine.mentorLog.slice().reverse().map(function(m){
+    return '<div class="class-row"><div class="timebox">'+fmtDateShort(m.date)+'</div><div><b>'+esc(m.topic)+'</b><br/><span class="muted small">'+esc(m.notes||"")+"</span></div></div>";
+  }).join("");
+}
+function addMeetingPrompt(){
+  modal('<h3>Log a Mentor Meeting</h3><div class="field" style="margin-top:1rem"><label>Date</label><input id="mmDate" type="date" value="'+todayISO()+'" /></div>' +
+    '<div class="field"><label>Topic discussed</label><input id="mmTopic" placeholder="e.g. Attendance recovery plan" /></div>' +
+    '<div class="field"><label>Notes / action points</label><textarea class="ta" id="mmNotes"></textarea></div>' +
+    '<div class="row"><button class="btn primary" onclick="saveMeeting()">Save meeting</button><button class="btn" onclick="closeModal()">Cancel</button></div>');
+}
+function saveMeeting(){
+  var t = $("mmTopic").value.trim(); if(!t) return toast("Add a topic.");
+  DB.mine.mentorLog.push({date: $("mmDate").value || todayISO(), topic:t, notes: $("mmNotes").value.trim()});
+  save(); closeModal(); go("mentoring"); toast("Meeting logged.");
+}
+function emergencyModal(){
+  modal('<h3 style="color:var(--bad)">Emergency Contact</h3><p style="margin:.6rem 0">If this is an immediate safety emergency, call <b>112</b> first.</p>' +
+    '<table class="tbl"><tbody><tr><td class="muted">Mentor</td><td>Dr. Sunita Sharma — <a href="mailto:sunita.sharma@mitsgwalior.in">sunita.sharma@mitsgwalior.in</a></td></tr>' +
+    '<tr><td class="muted">Office</td><td>Room 10, Block E</td></tr>' +
+    '<tr><td class="muted">Institute</td><td>MITS Gwalior — main reception, Gola ka Mandir</td></tr></tbody></table>' +
+    '<div class="row" style="margin-top:1rem"><a class="btn primary" href="mailto:sunita.sharma@mitsgwalior.in">Email mentor now</a><button class="btn" onclick="closeModal()">Close</button></div>');
+}
+
+/* ================= DOWNLOADS ================= */
+RENDER.downloads = function(){
+  var cats = ["All","Notes","Forms & Docs","Software","Other"];
+  var cat = state.dlCat || "All";
+  var h = '<div class="page-head"><h1>Downloads</h1><p>Institute files, plus your own saved files and notes</p></div>' +
+    '<div class="row mb"><input id="dlSearch" type="search" placeholder="Search downloads…" style="flex:1;min-width:200px;border:1px solid var(--line2);border-radius:999px;padding:.55rem 1rem;background:var(--card)" />' +
+    '<select id="dlCatSel" style="border:1px solid var(--line2);border-radius:999px;padding:.5rem .8rem;background:var(--card)">' + cats.map(function(c){ return '<option'+(c===cat?" selected":"")+">"+c+"</option>"; }).join("") + "</select></div>";
+  h += '<h3 style="margin-bottom:.6rem">From the Institute</h3><div class="empty mb"><b>No downloads available</b>The institute has not published any files here yet. Files shared by faculty appear under Course Materials in each course.</div>';
+  h += '<div class="spread"><h3>My Files &amp; Notes <span class="chip blue">Saved by me</span></h3><button class="btn amber sm" onclick="addFilePrompt()">+ Add file / note</button></div><div id="myFiles" style="margin-top:.7rem">' + myFilesHTML(cat, "") + "</div>";
+  return h;
+};
+RENDER.downloads_init = function(){
+  $("dlCatSel").addEventListener("change", function(){ state.dlCat = this.value; $("myFiles").innerHTML = myFilesHTML(this.value, $("dlSearch").value); });
+  $("dlSearch").addEventListener("input", function(){ $("myFiles").innerHTML = myFilesHTML(state.dlCat||"All", this.value); });
+};
+function myFilesHTML(cat, q){
+  var list = DB.mine.files.filter(function(f){ return (cat==="All" || f.cat===cat) && (!q || f.name.toLowerCase().indexOf(q.toLowerCase())>=0); });
+  if(!list.length) return '<div class="empty"><b>Nothing saved here yet</b>Add your own files and notes — they stay on this device and are always available offline.</div>';
+  return '<div class="grid g2">' + list.map(function(f){
+    var i = DB.mine.files.indexOf(f);
+    return '<div class="quiz-card"><div class="spread"><b>'+esc(f.name)+'</b><span class="chip">'+esc(f.cat)+'</span></div>' +
+      (f.note? '<p class="muted small">'+esc(f.note)+"</p>" : "") +
+      '<div class="row"><button class="btn sm primary" onclick="downloadMyFile('+i+')">Download</button><button class="btn sm danger" onclick="deleteMyFile('+i+')">Delete</button></div></div>';
+  }).join("") + "</div>";
+}
+function addFilePrompt(){
+  modal('<h3>Add a File / Note</h3><p class="muted small">Saved in this browser, listed only under “My Files” — kept separate from institute downloads.</p>' +
+    '<div class="field" style="margin-top:1rem"><label>Name</label><input id="mfName" placeholder="e.g. Physics formula sheet" /></div>' +
+    '<div class="field"><label>Category</label><select id="mfCat"><option>Notes</option><option>Forms & Docs</option><option>Software</option><option>Other</option></select></div>' +
+    '<div class="field"><label>Contents / note</label><textarea class="ta" id="mfNote" placeholder="Paste the note text, a link, or a reminder of where the file is…"></textarea></div>' +
+    '<div class="row"><button class="btn primary" onclick="saveMyFile()">Save</button><button class="btn" onclick="closeModal()">Cancel</button></div>');
+}
+function saveMyFile(){
+  var n = $("mfName").value.trim(); if(!n) return toast("Give it a name.");
+  DB.mine.files.push({name:n, cat:$("mfCat").value, note:$("mfNote").value.trim()});
+  save(); closeModal(); go("downloads"); toast("Saved to My Files.");
+}
+function downloadMyFile(i){ var f = DB.mine.files[i]; downloadText(f.name.replace(/[^a-z0-9]+/gi,"-")+".txt", f.name + "\nCategory: " + f.cat + "\n\n" + (f.note||"")); }
+function deleteMyFile(i){ DB.mine.files.splice(i,1); save(); go("downloads"); }
+
+/* ================= ACADEMIC CALENDAR ================= */
+RENDER.calendar = function(){
+  var tab = state.calTab, view = state.calView;
+  var h = '<div class="page-head"><h1>Academic Calendar</h1><p>Academic session 2026–27 · Madhav Institute of Technology &amp; Science</p></div>' +
+    '<div class="row mb"><div class="pill-tabs">' + [["sem1","2026–27 · Sem 1"],["sem2","2026–27 · Sem 2"]].map(function(t){ return '<button class="'+(tab===t[0]?"on":"")+'" onclick="state.calTab=\''+t[0]+'\';go(\'calendar\')">'+t[1]+"</button>"; }).join("") + "</div>" +
+    '<input id="calSearch" type="search" placeholder="Search calendar events…" style="flex:1;min-width:180px;border:1px solid var(--line2);border-radius:999px;padding:.5rem 1rem;background:var(--card)" />' +
+    '<div class="pill-tabs">' + ["Month","Week","Day"].map(function(v){ return '<button class="'+(view===v.toLowerCase()?"on":"")+'" onclick="state.calView=\''+v.toLowerCase()+'\';go(\'calendar\')">'+v+"</button>"; }).join("") + "</div></div>" +
+    '<div id="calBody">' + calBodyHTML("") + "</div>";
+  return h;
+};
+RENDER.calendar_init = function(){ $("calSearch").addEventListener("input", function(){ $("calBody").innerHTML = calBodyHTML(this.value); }); };
+function calBodyHTML(q){
+  var evs = (DB.calendar[state.calTab]||[]).concat(DB.mine.myEvents).filter(function(e){ return !q || e.title.toLowerCase().indexOf(q.toLowerCase())>=0; })
+    .slice().sort(function(a,b){ return a.date<b.date?-1:1; });
+  if(state.calView==="month"){
+    return '<div class="card"><h3>November 2026</h3><div style="margin-top:.7rem;max-width:520px">' + monthCalHTML(2026,10,"2026-11-21") + '</div>' +
+      '<h3 style="margin:1.2rem 0 .4rem">All '+(state.calTab==="sem1"?"Semester 1":"Semester 2")+' events</h3>' + calListHTML(evs) + "</div>";
+  }
+  if(state.calView==="week"){
+    var wk = evs.filter(function(e){ return e.date>="2026-11-16" && e.date<="2026-11-22"; });
+    return '<div class="card"><h3>This Week · 16–22 Nov 2026</h3><div style="margin-top:.5rem">' + (wk.length? calListHTML(wk) : '<p class="muted small">No calendar events this week.</p>') + "</div></div>";
+  }
+  var day = evs.filter(function(e){ return e.date==="2026-11-21"; });
+  return '<div class="card"><h3>Today · 21 Nov 2026</h3><div style="margin-top:.5rem">' + (day.length? calListHTML(day) : '<p class="muted small">No calendar events today. Classes run as per the timetable.</p>') + "</div></div>";
+}
+function calListHTML(evs){
+  if(!evs.length) return '<p class="muted small">No events match.</p>';
+  return evs.map(function(e){
+    return '<div class="class-row"><div class="timebox">'+fmtDateShort(e.date)+'<br/>'+dayName(e.date)+'</div><div><b>'+esc(e.title)+'</b><br/><span class="chip" style="margin-top:.2rem">'+esc(e.type)+"</span></div></div>";
+  }).join("");
+}
+
+/* ================= CAMPUS EVENTS ================= */
+RENDER.events = function(){
+  var h = '<div class="page-head"><h1>Campus Events</h1><p>Upcoming events at MITS</p></div>';
+  var mine = DB.mine.myEvents.slice().sort(function(a,b){ return a.date<b.date?-1:1; });
+  if(!mine.length){
+    h += '<div class="empty mb"><b>No upcoming events right now</b>The institute has not listed any upcoming campus events. When events are announced, they will appear here — you can also track your own below.</div>';
+  } else {
+    h += '<div class="grid g2 mb">' + mine.map(function(e, i){
+      return '<div class="quiz-card"><div class="spread"><b>'+esc(e.title)+'</b><span class="chip blue">My event</span></div><p class="muted small">'+fmtDate(e.date)+' · '+esc(e.type)+'</p><button class="btn sm danger" onclick="delMyEvent('+DB.mine.myEvents.indexOf(e)+')">Remove</button></div>';
+    }).join("") + "</div>";
+  }
+  h += '<div class="card"><h3>Add Your Own Event</h3><p class="muted small">Club meetups, hackathons, personal reminders — saved on this device and shown on your calendar too.</p>' +
+    '<div class="row" style="margin-top:.7rem"><input id="evTitle" placeholder="Event title" style="flex:2;min-width:160px;border:1px solid var(--line2);border-radius:8px;padding:.5rem .7rem;background:var(--card)" />' +
+    '<input id="evDate" type="date" value="2026-11-25" style="border:1px solid var(--line2);border-radius:8px;padding:.5rem .7rem;background:var(--card)" />' +
+    '<button class="btn primary" onclick="addMyEvent()">Add event</button></div></div>';
+  return h;
+};
+function addMyEvent(){
+  var t = $("evTitle").value.trim(); if(!t) return toast("Add a title.");
+  DB.mine.myEvents.push({date: $("evDate").value || todayISO(), title:t, type:"Personal"});
+  save(); go("events"); toast("Event added — it also shows on your calendar.");
+}
+function delMyEvent(i){ DB.mine.myEvents.splice(i,1); save(); go("events"); }
+
+/* ================= SCHEMES ================= */
+RENDER.schemes = function(){
+  var h = '<div class="page-head"><h1>Scheme &amp; Syllabus Library</h1><p>Official schemes and syllabi published by the institute</p></div>' +
+    '<div class="row mb"><input id="schSearch" type="search" placeholder="Search schemes…" style="flex:1;min-width:180px;border:1px solid var(--line2);border-radius:999px;padding:.55rem 1rem;background:var(--card)" />' +
+    '<select id="schSort" style="border:1px solid var(--line2);border-radius:999px;padding:.5rem .8rem;background:var(--card)"><option value="new">Newest first</option><option value="old">Oldest first</option></select></div>' +
+    '<div class="row mb">' + [["Program","schProg",["All","B.Tech","M.Tech","MBA"]],["Department","schDept",["All","Computer Science & Engineering","Electronics & Communication","Humanities & Management","All Departments"]],["Branch","schBranch",["All","AI & Data Science","CSE","ECE","MBA","All Branches"]],["Regulation","schReg",["All","2026","2025","2024","2022"]],["Semester","schSem",["All","1"]]].map(function(f){
+      return '<label class="small muted">'+f[0]+' <select id="'+f[1]+'" style="border:1px solid var(--line2);border-radius:8px;padding:.4rem .5rem;background:var(--card)">'+f[2].map(function(o){ return "<option"+(o==="All"?" selected":"")+">"+o+"</option>"; }).join("")+"</select></label>";
+    }).join("") + "</div>" +
+    '<div id="schemeList">' + schemeListHTML({}) + "</div>";
+  return h;
+};
+RENDER.schemes_init = function(){
+  var upd = function(){
+    schemeListHTMLApply({ q:$("schSearch").value, prog:$("schProg").value, dept:$("schDept").value, branch:$("schBranch").value, reg:$("schReg").value, sem:$("schSem").value, sort:$("schSort").value });
+  };
+  ["schSearch","schProg","schDept","schBranch","schReg","schSem","schSort"].forEach(function(id){ $(id).addEventListener("input", upd); $(id).addEventListener("change", upd); });
+};
+function schemeListHTMLApply(f){ $("schemeList").innerHTML = schemeListHTML(f); }
+function schemeListHTML(f){
+  var list = DB.schemes.filter(function(s){
+    return (!f.q || (s.title+s.branch).toLowerCase().indexOf(f.q.toLowerCase())>=0) &&
+      (!f.prog || f.prog==="All" || s.program===f.prog) && (!f.dept || f.dept==="All" || s.dept===f.dept) &&
+      (!f.branch || f.branch==="All" || s.branch===f.branch) && (!f.reg || f.reg==="All" || s.reg===f.reg) &&
+      (!f.sem || f.sem==="All" || String(s.sem)===String(f.sem));
+  });
+  if(f.sort==="old") list.sort(function(a,b){ return a.year-b.year; }); else list.sort(function(a,b){ return b.year-a.year; });
+  if(!list.length) return '<div class="empty"><b>No schemes match</b>Try clearing a filter or two.</div>';
+  return '<div class="grid g2">' + list.map(function(s){
+    return '<div class="quiz-card"><div class="spread"><b>'+esc(s.title)+'</b><span class="chip amber">Regulation '+esc(s.reg)+'</span></div>' +
+      '<p class="muted small">'+esc(s.program)+' · '+esc(s.dept)+' · Semester '+s.sem+'</p>' +
+      '<div class="row"><button class="btn sm" onclick="viewScheme(\''+s.id+'\')">View Scheme</button><button class="btn sm primary" onclick="dlScheme(\''+s.id+'\')">Download PDF</button></div></div>';
+  }).join("") + "</div>";
+}
+function schemeById(id){ return DB.schemes.find(function(s){ return s.id===id; }); }
+function viewScheme(id){
+  var s = schemeById(id);
+  modal('<h3>'+esc(s.title)+'</h3><p class="muted small">'+esc(s.program)+' · '+esc(s.dept)+' · Regulation '+esc(s.reg)+' · Semester '+s.sem+'</p>' +
+    '<h4 style="margin:1rem 0 .4rem">Subjects — Semester '+s.sem+'</h4>' +
+    s.subjects.map(function(x,i){ return '<div class="checkline"><span class="chip">'+(i+1)+'</span><span>'+esc(x)+"</span></div>"; }).join("") +
+    '<div class="row" style="margin-top:1rem"><button class="btn primary" onclick="dlScheme(\''+s.id+'\')">Download PDF</button><button class="btn" onclick="closeModal()">Close</button></div>', true);
+}
+function dlScheme(id){
+  var s = schemeById(id);
+  makePDF(["MITS Gwalior — Scheme & Syllabus", s.title, "Program: "+s.program+"  Department: "+s.dept, "Regulation: "+s.reg+"  Semester: "+s.sem, "", "Subjects:"].concat(s.subjects.map(function(x,i){ return "  "+(i+1)+". "+x; })), "Scheme-"+s.branch.replace(/\s+/g,"")+"-Sem"+s.sem+".pdf");
+  toast("Scheme PDF downloaded.");
+}
+
+/* ================= FORMS ================= */
+RENDER.forms = function(){
+  return '<div class="page-head"><h1>Forms</h1><p>Institute forms for students</p></div>' +
+    '<div class="row mb"><input type="search" placeholder="Search forms…" style="flex:1;border:1px solid var(--line2);border-radius:999px;padding:.55rem 1rem;background:var(--card)" oninput="document.getElementById(\'formEmpty\').style.display = this.value ? \'none\' : \'\'" /></div>' +
+    '<div class="empty" id="formEmpty"><b>No forms available</b>There are no forms published right now. Scholarship and examination forms are usually announced through Notices first.</div>';
+};
+
+/* ================= NOTICES ================= */
+RENDER.notices = function(){
+  var cats = ["All","Academic","AMS Notice","Event","Examination","General Notice","Scholarship"];
+  var cd = examCountdown();
+  var h = '<div class="page-head"><h1>Student Notices</h1><p>Official notices from the institute · ' + unreadNotices() + ' unread</p></div>' +
+    '<div class="alert-strip amber mb"><span style="font-size:1.25rem">📝</span><div><b>Major Evaluations start 23 Nov 2026</b> — ' + (cd.live ? "examinations have begun. All the best!" : "that's <b>" + cd.d + " days, " + cd.h + " hrs, " + cd.m + " mins</b> from now. Admit card + institute ID are compulsory.") + '</div></div>' +
+    '<div class="row mb"><input id="noticeSearch" type="search" placeholder="Search notices…" style="flex:1;min-width:180px;border:1px solid var(--line2);border-radius:999px;padding:.55rem 1rem;background:var(--card)" />' +
+    '<div class="pill-tabs">' + cats.map(function(c){ return '<button class="'+(state.noticeCat===c?"on":"")+'" onclick="state.noticeCat=\''+c+'\';go(\'notices\')">'+c+"</button>"; }).join("") + "</div></div>" +
+    '<div id="noticeList" class="grid" style="gap:.9rem">' + noticeListHTML("") + "</div>";
+  return h;
+};
+RENDER.notices_init = function(){ $("noticeSearch").addEventListener("input", function(){ $("noticeList").innerHTML = noticeListHTML(this.value); }); };
+function noticeListHTML(q){
+  var list = DB.notices.filter(function(n){
+    return (state.noticeCat==="All" || n.cat===state.noticeCat) && (!q || n.title.toLowerCase().indexOf(q.toLowerCase())>=0);
+  }).slice().sort(function(a,b){ return a.date<b.date?1:-1; });
+  if(!list.length) return '<div class="empty"><b>No notices found</b>Nothing in this category matches your search.</div>';
+  return list.map(function(n){
+    var ex = expiryInfo(n), unread = DB.mine.readNotices.indexOf(n.id)<0;
+    return '<article class="notice'+(unread?" unread":"")+'"><div class="spread"><div class="row"><span class="chip amber">'+esc(n.cat)+'</span>' +
+      n.audience.map(function(a){ return '<span class="chip">'+esc(a)+"</span>"; }).join("") +
+      (unread? '<span class="chip red">Unread</span>' : "") + '</div><span class="tiny muted">'+fmtDate(n.date)+'</span></div>' +
+      '<h3 style="margin:.55rem 0 .3rem;font-size:1.05rem">'+esc(n.title)+'</h3>' +
+      '<p class="small muted">By '+esc(n.by)+' · <span class="chip '+ex.cls+'">'+ex.soon+'</span> <span class="tiny">'+ex.label+'</span></p>' +
+      '<div id="nb-'+n.id+'" class="hidden"><p class="small" style="margin-top:.6rem">'+esc(n.body)+'</p>' +
+      '<div class="row" style="margin-top:.6rem"><span class="chip">📎 '+esc(n.pdf)+'</span><button class="btn sm" onclick="viewNoticePdf(\''+n.id+'\')">View</button><button class="btn sm primary" onclick="dlNoticePdf(\''+n.id+'\')">Download</button></div></div>' +
+      '<button class="btn sm ghost" style="margin-top:.5rem" onclick="toggleNotice(\''+n.id+'\', this)">Read more ↓</button></article>';
+  }).join("");
+}
+function toggleNotice(id, btn){
+  var el = $("nb-"+id), open = el.classList.toggle("hidden")===false;
+  btn.textContent = open ? "Show less ↑" : "Read more ↓";
+  if(open && DB.mine.readNotices.indexOf(id)<0){ DB.mine.readNotices.push(id); save(); buildNav(); btn.closest("article").classList.remove("unread"); }
+}
+function viewNoticePdf(id){
+  var n = DB.notices.find(function(x){ return x.id===id; });
+  modal('<h3>'+esc(n.title)+'</h3><p class="muted small">'+esc(n.pdf)+' · '+esc(n.cat)+' · '+esc(n.by)+'</p><p class="small" style="margin-top:.8rem;white-space:pre-wrap">'+esc(n.body)+'</p><div class="row" style="margin-top:1rem"><button class="btn primary" onclick="dlNoticePdf(\''+id+'\')">Download PDF</button><button class="btn" onclick="closeModal()">Close</button></div>');
+}
+function dlNoticePdf(id){
+  var n = DB.notices.find(function(x){ return x.id===id; });
+  makePDF(["MITS Gwalior — Notice", "", n.title, "Category: "+n.cat+"   Issued by: "+n.by, "Date: "+fmtDate(n.date), "", n.body], n.pdf);
+}
+</script>
+
+<script>
+/* ================= CAMPUS PULSE ================= */
+RENDER.pulse = function(){
+  var cats = ["All","Academic","Campus Life","Tech","Sports","Culture","Opinion","Announcement","Events","General"];
+  var featured = DB.articles.filter(function(a){ return a.featured; });
+  var fi = state.pulseIdx || 0; if(fi>=featured.length) fi = 0;
+  var f = featured[fi];
+  var h = '<div class="page-head"><h1>Campus Pulse</h1><p>Share your thoughts with the campus community</p></div>';
+  if(f){
+    h += '<div class="spot-wrap" style="background:linear-gradient(120deg,var(--ink),var(--pine))"><div class="inner">' +
+      '<span class="chip amber">In the Spotlight · '+(fi+1)+' / '+featured.length+'</span>' +
+      '<h2 style="font-family:var(--display);font-size:1.5rem;margin:.6rem 0 .4rem">'+esc(f.title)+'</h2>' +
+      '<p class="small" style="color:#d5dfd0">'+esc(f.body.slice(0,150))+'…</p>' +
+      '<p class="tiny" style="color:#a9bfa9;margin:.5rem 0 .8rem">'+esc(f.author)+' · '+fmtDate(f.date)+' · ♥ '+f.likes+'</p>' +
+      '<button class="btn amber sm" onclick="readArticle(\''+f.id+'\')">Read article</button></div>' +
+      '<div class="spot-nav"><button class="icon-btn" onclick="state.pulseIdx='+(fi-1+featured.length)%featured.length+';go(\'pulse\')" aria-label="Previous">←</button>' +
+      '<button class="icon-btn" onclick="state.pulseIdx='+(fi+1)%featured.length+';go(\'pulse\')" aria-label="Next">→</button></div></div>';
+  }
+  h += '<div class="card mt"><h3>Write an Article</h3><p class="muted small">Publish to Campus Pulse — your article appears instantly in “Fresh from the Campus”, marked as yours.</p>' +
+    '<div class="row" style="margin-top:.7rem"><input id="artTitle" placeholder="Article title" style="flex:2;min-width:180px;border:1px solid var(--line2);border-radius:8px;padding:.55rem .75rem;background:var(--card)" />' +
+    '<select id="artCat" style="border:1px solid var(--line2);border-radius:8px;padding:.5rem .6rem;background:var(--card)">'+cats.slice(1).map(function(c){ return "<option>"+c+"</option>"; }).join("")+'</select></div>' +
+    '<textarea class="ta" id="artBody" style="margin-top:.6rem" placeholder="Write your article…"></textarea>' +
+    '<button class="btn primary" style="margin-top:.6rem" onclick="publishArticle()">Publish article</button></div>';
+  h += '<div class="row mt mb"><input id="pulseSearch" type="search" placeholder="Search articles…" style="flex:1;min-width:170px;border:1px solid var(--line2);border-radius:999px;padding:.55rem 1rem;background:var(--card)" />' +
+    '<select id="pulseSort" style="border:1px solid var(--line2);border-radius:999px;padding:.5rem .8rem;background:var(--card)"><option value="new">Newest First</option><option value="old">Oldest First</option><option value="pop">Most Popular</option></select></div>' +
+    '<div class="pill-tabs mb">' + cats.map(function(c){ return '<button class="'+(state.pulseCat===c?"on":"")+'" onclick="state.pulseCat=\''+c+'\';go(\'pulse\')">'+c+"</button>"; }).join("") + "</div>" +
+    '<h3 style="margin-bottom:.7rem">Fresh from the Campus</h3><div id="pulseList">' + pulseListHTML("", "new") + "</div>";
+  return h;
+};
+RENDER.pulse_init = function(){
+  var upd = function(){ $("pulseList").innerHTML = pulseListHTML($("pulseSearch").value, $("pulseSort").value); };
+  $("pulseSearch").addEventListener("input", upd); $("pulseSort").addEventListener("change", upd);
+};
+function pulseListHTML(q, sort){
+  var list = DB.articles.filter(function(a){ return (state.pulseCat==="All" || a.cat===state.pulseCat) && (!q || a.title.toLowerCase().indexOf(q.toLowerCase())>=0); });
+  if(sort==="old") list.sort(function(a,b){ return a.date<b.date?-1:1; });
+  else if(sort==="pop") list.sort(function(a,b){ return b.likes-a.likes; });
+  else list.sort(function(a,b){ return a.date<b.date?1:-1; });
+  if(!list.length) return '<div class="empty"><b>No articles here</b>Be the first to write one for this category.</div>';
+  var covers = ["linear-gradient(120deg,#14532d,#1d6a44)","linear-gradient(120deg,#7a4a06,#e8930c)","linear-gradient(120deg,#123a2c,#2b8a5c)","linear-gradient(120deg,#5b3413,#b3701a)"];
+  return '<div class="grid g3">' + list.map(function(a, i){
+    var liked = DB.mine.likedArticles.indexOf(a.id)>=0;
+    return '<article class="article-card" onclick="readArticle(\''+a.id+'\')"><div class="article-cover" style="background:'+covers[i%4]+'">'+esc(a.cat.toUpperCase())+'</div>' +
+      '<div style="padding:.95rem 1rem"><b>'+esc(a.title)+'</b>' +
+      '<p class="tiny muted" style="margin:.35rem 0">'+esc(a.author)+' · '+fmtDate(a.date)+'</p>' +
+      '<div class="row"><span class="chip '+(liked?"amber":"")+'">♥ '+a.likes+'</span>'+(a.mine? '<span class="chip blue">Written by me</span>' : "")+(a.demo? '<span class="chip">Demo story</span>' : "")+"</div></div></article>";
+  }).join("") + "</div>";
+}
+function readArticle(id){
+  var a = DB.articles.find(function(x){ return x.id===id; }); if(!a) return;
+  var liked = DB.mine.likedArticles.indexOf(id)>=0;
+  modal('<span class="chip amber">'+esc(a.cat)+'</span><h3 style="margin:.6rem 0 .3rem;font-size:1.25rem">'+esc(a.title)+'</h3>' +
+    '<p class="tiny muted">'+esc(a.author)+' · '+fmtDate(a.date)+' · ♥ '+a.likes+' likes</p>' +
+    '<p class="small" style="margin-top:.9rem;white-space:pre-wrap;line-height:1.65">'+esc(a.body)+'</p>' +
+    '<div class="row" style="margin-top:1.1rem"><button class="btn '+(liked?"":"primary")+'" onclick="likeArticle(\''+id+'\')">'+(liked? "♥ Liked" : "♥ Like this article")+'</button><button class="btn" onclick="closeModal()">Close</button></div>', true);
+}
+function likeArticle(id){
+  var a = DB.articles.find(function(x){ return x.id===id; });
+  var i = DB.mine.likedArticles.indexOf(id);
+  if(i>=0){ DB.mine.likedArticles.splice(i,1); a.likes--; } else { DB.mine.likedArticles.push(id); a.likes++; }
+  save(); readArticle(id);
+}
+function publishArticle(){
+  var t = $("artTitle").value.trim(), b = $("artBody").value.trim();
+  if(!t || !b) return toast("Add a title and some content first.");
+  DB.articles.unshift({ id:"mine-a-"+Date.now(), title:t, cat:$("artCat").value, author:"Sanidhya Sharma · AI & DS, Sem 1", date: todayISO(), likes:0, featured:false, body:b, mine:true });
+  save(); go("pulse"); toast("Article published to Campus Pulse.");
+}
+
+/* ================= TIMETABLE ================= */
+RENDER.timetable = function(){
+  var days = ["Mon","Tue","Wed","Thu","Fri","Sat"];
+  var known = {};
+  DB.courses.forEach(function(c){ c.slots.forEach(function(s){ (known[s.d] = known[s.d]||[]).push({c:c, t:s.t}); }); });
+  var h = '<div class="page-head"><h1>Weekly Timetable</h1><p>Built from your courses\' published class schedules — a page the real AMS doesn\'t have</p></div>';
+  h += '<div class="tt-wrap"><table class="tt"><thead><tr><th style="width:110px">Day</th><th>Classes</th></tr></thead><tbody>';
+  days.forEach(function(d){
+    var list = known[d]||[];
+    h += "<tr><td><b>"+d+"</b></td><td>" + (list.length ? list.map(function(x){
+      return '<div class="tt-cell" style="display:inline-block;vertical-align:top;margin:0 1.2rem .4rem 0"><b>'+esc(x.c.name)+'</b><span>'+esc(x.t)+" · "+(x.c.room? "Room "+esc(x.c.room)+" · " : "")+esc(x.c.faculty||"")+"</span></div>";
+    }).join("") : '<span class="muted small">No published slots</span>') + "</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  var noSlots = DB.courses.filter(function(c){ return !c.slots.length; });
+  if(noSlots.length) h += '<p class="muted small" style="margin-top:.8rem">Weekly slots not published in AMS for: '+noSlots.map(function(c){ return esc(c.name); }).join(", ")+". They will appear here automatically when faculty publish them.</p>";
+  return h;
+};
+
+/* ================= ASSIGNMENTS ================= */
+RENDER.assignments = function(){
+  var t = todayISO();
+  var list = DB.mine.assignments.slice().sort(function(a,b){ return a.due<b.due?-1:1; });
+  var h = '<div class="page-head"><h1>Assignments Tracker</h1><p>Your own tracker — the real AMS has no assignments section at all</p></div>' +
+    '<div class="card mb"><h3>Add an Assignment</h3><div class="row" style="margin-top:.7rem">' +
+    '<input id="asTitle" placeholder="e.g. Mathematics-I — Tutorial 4" style="flex:2;min-width:180px;border:1px solid var(--line2);border-radius:8px;padding:.55rem .75rem;background:var(--card)" />' +
+    '<select id="asCourse" style="border:1px solid var(--line2);border-radius:8px;padding:.5rem .6rem;background:var(--card)">'+DB.courses.map(function(c){ return '<option value="'+c.id+'">'+esc(c.name)+"</option>"; }).join("")+'</select>' +
+    '<input id="asDue" type="date" value="2026-11-25" style="border:1px solid var(--line2);border-radius:8px;padding:.5rem .6rem;background:var(--card)" />' +
+    '<button class="btn primary" onclick="addAssignment()">Add</button></div></div>';
+  if(!list.length){ h += '<div class="empty"><b>No assignments tracked yet</b>Add your first assignment above — overdue ones get flagged automatically.</div>'; return h; }
+  h += '<div class="card">' + list.map(function(a){
+    var i = DB.mine.assignments.indexOf(a);
+    var overdue = !a.done && a.due < t, dueToday = !a.done && a.due===t;
+    return '<div class="checkline"><input type="checkbox" '+(a.done?"checked":"")+' onchange="toggleAssignment('+i+')" />' +
+      '<span style="flex:1" class="'+(a.done?"done":"")+'"><span style="'+(a.done?"text-decoration:line-through;color:var(--faint)":"")+'"><b>'+esc(a.title)+'</b></span><br/><span class="tiny muted">'+esc((courseById(a.courseId)||{name:""}).name)+' · Due '+fmtDate(a.due)+'</span></span>' +
+      (overdue? '<span class="chip red">Overdue</span>' : dueToday? '<span class="chip amber">Due today</span>' : a.done? '<span class="chip green">Done</span>' : '<span class="chip">Upcoming</span>') +
+      '<button class="btn sm danger" onclick="delAssignment('+i+')">Delete</button></div>';
+  }).join("") + "</div>";
+  return h;
+};
+function addAssignment(){
+  var t = $("asTitle").value.trim(); if(!t) return toast("Add a title.");
+  DB.mine.assignments.push({title:t, courseId:$("asCourse").value, due:$("asDue").value || todayISO(), done:false});
+  save(); buildNav(); go("assignments"); toast("Assignment added.");
+}
+function toggleAssignment(i){ DB.mine.assignments[i].done = !DB.mine.assignments[i].done; save(); buildNav(); go("assignments"); }
+function delAssignment(i){ DB.mine.assignments.splice(i,1); save(); buildNav(); go("assignments"); }
+
+/* ================= STUDY PLANNER ================= */
+RENDER.planner = function(){
+  var cd = examCountdown();
+  var h = '<div class="page-head"><h1>Study Planner</h1><p>Plan your days around what actually matters</p></div>' +
+    '<div class="grid g3 mb"><div class="stat"><div class="k">Major Evaluations</div><div class="v num" style="color:var(--amber)">'+(cd.live? "Live" : cd.d+"d "+cd.h+"h")+'</div><div class="s">Starting 23 Nov 2026</div></div>' +
+    '<div class="stat"><div class="k">Tasks Planned</div><div class="v num">'+DB.mine.planner.length+'</div><div class="s">'+DB.mine.planner.filter(function(x){return x.done;}).length+' completed</div></div>' +
+    '<div class="stat"><div class="k">Focus Course</div><div class="v" style="font-size:1.05rem;padding-top:.5rem">'+esc((DB.courses.slice().sort(function(a,b){ return pct(a.attended,a.total)-pct(b.attended,b.total); })[0]).name)+'</div><div class="s">Lowest attendance — needs attention</div></div></div>' +
+    '<div class="card"><h3>Add a Study Task</h3><div class="row" style="margin-top:.7rem">' +
+    '<input id="plTask" placeholder="e.g. Revise Cauchy–Euler equations" style="flex:2;min-width:180px;border:1px solid var(--line2);border-radius:8px;padding:.55rem .75rem;background:var(--card)" />' +
+    '<input id="plDate" type="date" value="'+todayISO()+'" style="border:1px solid var(--line2);border-radius:8px;padding:.5rem .6rem;background:var(--card)" />' +
+    '<button class="btn primary" onclick="addPlanTask()">Add task</button></div>' +
+    '<div style="margin-top:.8rem" id="planList">' + planListHTML() + "</div></div>" +
+    '<div class="card mt"><h3>Suggested Focus Before the Majors</h3><p class="muted small">From your data: Engineering Mechanics (57%) and Human Values &amp; Ethics (50%) are your lowest-attendance courses, and Quiz-4 / Quiz-5 of Introduction to Computing are still pending — clear those first, then revise Mathematics-I (64%).</p></div>';
+  return h;
+};
+function planListHTML(){
+  if(!DB.mine.planner.length) return '<p class="muted small">No tasks yet — add your first one above.</p>';
+  return DB.mine.planner.slice().sort(function(a,b){ return a.date<b.date?-1:1; }).map(function(t){
+    var i = DB.mine.planner.indexOf(t);
+    return '<div class="checkline"><input type="checkbox" '+(t.done?"checked":"")+' onchange="togglePlan('+i+')" /><span style="flex:1;'+(t.done?"text-decoration:line-through;color:var(--faint)":"")+'"><b>'+esc(t.task)+'</b> <span class="tiny muted">· '+fmtDate(t.date)+'</span></span><button class="btn sm danger" onclick="delPlan('+i+')">Delete</button></div>';
+  }).join("");
+}
+function addPlanTask(){
+  var v = $("plTask").value.trim(); if(!v) return toast("Write the task first.");
+  DB.mine.planner.push({task:v, date:$("plDate").value || todayISO(), done:false});
+  save(); go("planner"); toast("Task added to your planner.");
+}
+function togglePlan(i){ DB.mine.planner[i].done = !DB.mine.planner[i].done; save(); go("planner"); }
+function delPlan(i){ DB.mine.planner.splice(i,1); save(); go("planner"); }
+
+/* ================= DEVELOPER ================= */
+RENDER.developer = function(){
+  return '<div class="page-head"><h1>Developer</h1><p>The team behind AMS — and this portal</p></div>' +
+    '<div class="card" style="text-align:center;padding:2.2rem 1.2rem"><div class="crest" style="width:64px;height:64px;border-radius:18px;background:var(--amber);color:#221503;display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.6rem">M</div>' +
+    '<h2 style="font-family:var(--display);font-size:1.5rem;margin-top:1rem">The Team Behind AMS</h2>' +
+    '<p class="muted" style="max-width:52ch;margin:.5rem auto 0">The Academic Management System of MITS Gwalior is built and maintained by students, for students — under the Software Development Cell (SDC) Club.</p>' +
+    '<div class="grid g3" style="max-width:640px;margin:1.4rem auto 0;text-align:left">' +
+    '<div class="month-blk" style="text-align:center"><div class="avatar" style="margin:0 auto .5rem">VS</div><b>Vaibhav Sharma</b><br/><span class="chip amber" style="margin-top:.3rem">Team Lead</span></div>' +
+    '<div class="month-blk" style="text-align:center"><div class="avatar" style="margin:0 auto .5rem;background:var(--moss);color:#fff">SD</div><b>SDC Club</b><br/><span class="chip" style="margin-top:.3rem">Development Cell</span></div>' +
+    '<div class="month-blk" style="text-align:center"><div class="avatar" style="margin:0 auto .5rem;background:var(--pine);color:#fff">M</div><b>MITS Gwalior</b><br/><span class="chip" style="margin-top:.3rem">Estd. 1957</span></div></div>' +
+    '<p style="margin-top:1.6rem;font-family:var(--display);font-style:italic;color:var(--muted)">“Built with love by the students of MITS”</p></div>' +
+    '<div class="card mt"><h3>About This Portal</h3><p class="muted small">This portal rebuilds the AMS experience as a single static website — no server, nothing uploaded anywhere — and adds what students asked for: a bunk predictor, a weekly timetable, an assignments tracker, a study planner, a CGPA calculator, a quiz creator and a working notes notebook. Student additions are stored only in this browser. Faculty tools write into the same data, so attendance, quizzes, notices, materials and results flow straight to the student view.</p></div>';
+};
+
+/* ================= PROFILE & ID CARD ================= */
+RENDER.profile = function(){
+  var u = state.user, isFac = u.role==="faculty";
+  var rows = isFac ? [["Name","Dr. Divya"],["Role","Faculty"],["Department","Computer Science & Engineering"],["Email","divya@mitsgwalior.in"],["Course","Introduction to Computing"]]
+    : [["Full Name","Sanidhya Sharma"],["Programme","B.Tech. Artificial Intelligence and Data Science"],["Year / Semester","1st Year · 1st Semester"],["Section","Section H"],["Roll No.","26MC1SA112"],["Enrolment No.","0901CS261112"],["Batch","2026–2030"],["Institute Email","26mc1sa112@mitsgwl.ac.in"],["Mentor","Dr. Sunita Sharma"]];
+  var h = '<div class="page-head"><h1>My Profile</h1><p>'+(isFac? "Faculty account" : "This profile is managed by the administration — fields are read-only")+'</p></div>' +
+    '<div class="row" style="margin-bottom:1rem"><button class="btn" onclick="signOut()">Sign out</button><button class="btn danger" onclick="resetDemo()">Reset demo data</button></div>' +
+    '<div class="grid g2"><div class="card"><h3>Profile Details</h3><table class="tbl" style="margin-top:.5rem"><tbody>' +
+    rows.map(function(r){ return "<tr><td class='muted' style='width:42%'>"+r[0]+"</td><td><b>"+esc(r[1])+"</b> 🔒</td></tr>"; }).join("") +
+    '</tbody></table><p class="tiny muted" style="margin-top:.7rem">To correct any detail, contact the administration office — students cannot edit these fields in AMS either.</p></div>';
+  if(!isFac){
+    h += '<div><div class="card"><h3>Digital ID Card</h3><div class="pill-tabs" style="margin:.7rem 0"><button class="'+(state.idSide!=="back"?"on":"")+'" onclick="state.idSide=\'front\';go(\'profile\')">Front</button><button class="'+(state.idSide==="back"?"on":"")+'" onclick="state.idSide=\'back\';go(\'profile\')">Back</button></div>' +
+      '<div id="idCardWrap">' + idCardHTML() + '</div>' +
+      '<div class="row no-print" style="margin-top:1rem"><button class="btn primary" onclick="dlIdPdf()">Download ID PDF</button><button class="btn" onclick="printId()">Print ID Card</button></div></div></div>';
+  } else {
+    h += '<div class="card"><h3>Faculty Shortcuts</h3><p class="muted small">Everything you publish appears instantly in the student view.</p><div class="row" style="margin-top:.8rem"><button class="btn primary" onclick="go(\'f-attend\')">Mark attendance</button><button class="btn" onclick="go(\'f-quiz\')">Create quiz</button><button class="btn" onclick="go(\'f-results\')">Publish results</button></div></div>';
+  }
+  return h + "</div>";
+};
+function idCardHTML(){
+  if(state.idSide==="back"){
+    return '<div class="idcard id-back"><div class="amber-bar"></div><h3>ID Card — Back</h3><dl>' +
+      "<dt>Validity</dt><dd>2026 – 2030</dd><dt>Batch</dt><dd>2026–2030</dd><dt>Institute</dt><dd>MITS, Gwalior</dd>" +
+      "<dt>Address</dt><dd>Gola ka Mandir, Gwalior (M.P.)</dd><dt>Note</dt><dd>If found, return to the institute office.</dd></dl>" +
+      '<p class="tiny" style="position:absolute;bottom:.8rem;left:1.2rem;color:#a9bfa9">This card is the property of MITS Gwalior.</p></div>';
+  }
+  return '<div class="idcard"><div class="amber-bar"></div><h3>MITS Gwalior — Student ID</h3><dl>' +
+    "<dt>Name</dt><dd>Sanidhya Sharma</dd><dt>Course</dt><dd>B.Tech. AI &amp; Data Science</dd>" +
+    "<dt>Roll No.</dt><dd>26MC1SA112</dd><dt>Enrolment</dt><dd>0901CS261112</dd>" +
+    "<dt>Section</dt><dd>H · Semester 1</dd><dt>Valid</dt><dd>2026 – 2030</dd></dl></div>";
+}
+function dlIdPdf(){
+  makePDF(["MITS Gwalior — Student ID Card (Portal Copy)","","Name: Sanidhya Sharma","Course: B.Tech. Artificial Intelligence and Data Science","Roll No: 26MC1SA112","Enrolment No: 0901CS261112","Section: H · Semester 1","Validity: 2026 - 2030","","Institute: Madhav Institute of Technology & Science, Gwalior"], "MITS-ID-Sanidhya-Sharma.pdf");
+}
+function printId(){
+  var pa = $("printArea");
+  pa.innerHTML = "<h2>MITS Gwalior — Student ID Card</h2>" + idCardHTML() + "<p>Validity 2026–2030 · Roll No. 26MC1SA112</p>";
+  pa.classList.remove("hidden");
+  document.querySelector(".content").style.display="none";
+  setTimeout(function(){ window.print(); pa.classList.add("hidden"); document.querySelector(".content").style.display=""; }, 60);
+}
+function resetDemo(){
+  modal('<h3>Reset demo data?</h3><p class="muted small" style="margin:.5rem 0 1rem">This restores the original AMS snapshot and deletes everything added in this browser (planner, notes, quizzes, articles, faculty entries). This cannot be undone.</p><div class="row"><button class="btn danger" onclick="doReset()">Yes, reset everything</button><button class="btn" onclick="closeModal()">Cancel</button></div>');
+}
+function doReset(){ try{ localStorage.removeItem(LS_KEY); }catch(e){} DB = seedDB(); save(); closeModal(); signOut(); toast("Demo data reset."); }
+</script>
+
+<script>
+/* ================= FACULTY ================= */
+RENDER["f-dash"] = function(){
+  var sess = DB.facultySessions.length;
+  var myQuizzes = DB.quizzes.filter(function(q){ return q.facultyMade; }).length;
+  var h = '<section class="hero"><h1>Welcome, Dr. Divya</h1><p>Faculty console · Introduction to Computing — everything you publish here appears instantly in the student view. That two-way loop is what makes this a working AMS, not a read-only copy.</p>' +
+    '<div class="row"><button class="btn amber" onclick="go(\'f-attend\')">Mark Attendance</button><button class="btn" style="background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)" onclick="go(\'f-quiz\')">Create Quiz</button></div></section>';
+  h += '<div class="grid g4 mt">' + statCard2("My Course","Intro to Computing","Dr. Divya · Room J010") +
+    statCard2("Sessions Marked", String(sess), "via this console") +
+    statCard2("Quizzes Published", String(myQuizzes), "by faculty") +
+    statCard2("Students", String(ROSTER.length), "Section H roster") + "</div>";
+  h += '<div class="grid g3 mt">' +
+    fAction("Mark Attendance","Take today's register for Introduction to Computing — Sanidhya's record updates live.","f-attend") +
+    fAction("Create & Schedule Quiz","Build a timed quiz with auto-grading for your course.","f-quiz") +
+    fAction("Post a Notice","Announcements reach every student's notice board with expiry tracking.","f-notice") +
+    fAction("Upload Course Material","Share files into the course's Materials tab.","f-material") +
+    fAction("Publish Results","Publish marks — they flow into Marks, Academics and the student's tracker.","f-results") +
+    fAction("View as Student","See exactly what Sanidhya sees in his portal.","student-preview") + "</div>";
+  return h;
+};
+function statCard2(k,v,s){ return '<div class="stat"><div class="k">'+k+'</div><div class="v" style="font-size:1.35rem;padding-top:.35rem">'+v+'</div><div class="s">'+s+"</div></div>"; }
+function fAction(t, d, dest){
+  return '<div class="card"><h3>'+t+'</h3><p class="muted small" style="margin:.4rem 0 .9rem">'+d+'</p><button class="btn sm primary" onclick="'+(dest==="student-preview" ? "previewAsStudent()" : "go('"+dest+"')")+'">Open →</button></div>';
+}
+function previewAsStudent(){
+  state.user = { role:"student", name:STUDENT.name, email:STUDENT.email };
+  $("brandRole").textContent = "Student"; $("sideName").textContent = STUDENT.name; $("sideMeta").textContent = STUDENT.roll + " · Sem 1";
+  buildNav(); go("dashboard"); toast("Viewing as Sanidhya (student). Sign out to return to faculty.");
+}
+RENDER["f-attend"] = function(){
+  var cid = FACULTY_DEMO.courseId, c = courseById(cid);
+  var date = state.fDate || todayISO();
+  var existing = DB.facultySessions.find(function(s){ return s.courseId===cid && s.date===date; });
+  var h = '<div class="page-head"><h1>Mark Attendance</h1><p>'+esc(c.name)+' · Section H · changes reflect in the student view immediately</p></div>' +
+    '<div class="card"><div class="row"><label class="small"><b>Session date</b> <input type="date" id="fDate" value="'+date+'" style="border:1px solid var(--line2);border-radius:8px;padding:.45rem .6rem;background:var(--card)" /></label>' +
+    '<button class="btn sm" onclick="state.fDate=document.getElementById(\'fDate\').value;go(\'f-attend\')">Load register</button>' +
+    (existing? '<span class="chip green">Register already saved for this date — saving again updates it</span>' : '<span class="chip amber">New register</span>') + "</div>" +
+    '<table class="tbl" style="margin-top:.8rem"><thead><tr><th>Roll No.</th><th>Student</th><th>Present</th></tr></thead><tbody>' +
+    ROSTER.map(function(name, i){
+      var present = existing ? existing.marks[ROLLS[i]] !== false : true;
+      return "<tr><td class='num'>"+ROLLS[i]+"</td><td><b>"+esc(name)+"</b>"+(i===0? ' <span class="chip blue">Demo student</span>' : "")+'</td><td><input type="checkbox" class="f-att" data-roll="'+ROLLS[i]+'" '+(present?"checked":"")+' style="width:22px;height:22px;accent-color:var(--moss)" /></td></tr>';
+    }).join("") + "</tbody></table>" +
+    '<div class="row" style="margin-top:1rem"><button class="btn primary" onclick="saveRegister()">Save register</button><span class="tiny muted">Tip: uncheck absentees, then save.</span></div></div>';
+  return h;
+};
+function saveRegister(){
+  var cid = FACULTY_DEMO.courseId, date = $("fDate").value || todayISO();
+  var marks = {};
+  Array.prototype.forEach.call(document.querySelectorAll(".f-att"), function(cb){ marks[cb.getAttribute("data-roll")] = cb.checked; });
+  var idx = DB.facultySessions.findIndex(function(s){ return s.courseId===cid && s.date===date; });
+  var c = courseById(cid);
+  var stuRoll = ROLLS[0], wasPresent = idx>=0 ? DB.facultySessions[idx].marks[stuRoll] !== false : null;
+  var isPresent = marks[stuRoll] !== false;
+  if(idx>=0){
+    if(wasPresent !== isPresent){ c.attended += isPresent ? 1 : -1; }
+    DB.facultySessions[idx].marks = marks;
+  } else {
+    DB.facultySessions.push({courseId:cid, date:date, marks:marks});
+    c.total += 1; if(isPresent) c.attended += 1;
+    c.sessions.push({date:date, present:isPresent}); c.sessions.sort(function(a,b){ return a.date<b.date?-1:1; });
+  }
+  save(); go("f-attend"); toast("Register saved — Sanidhya's attendance is now " + c.attended + "/" + c.total + " (" + pct(c.attended, c.total) + "%).");
+}
+RENDER["f-quiz"] = function(){
+  var h = '<div class="page-head"><h1>Create Quiz</h1><p>Published quizzes appear in the student\'s quiz list as Pending and can be attempted immediately</p></div>' +
+    '<div class="card"><div class="grid g2"><div class="field"><label>Quiz title</label><input id="fqTitle" placeholder="e.g. Quiz-6 — Networks Basics" /></div>' +
+    '<div class="field"><label>Course</label><select id="fqCourse">'+DB.courses.map(function(c){ return '<option value="'+c.id+'"'+(c.id==="ic"?" selected":"")+">"+esc(c.name)+"</option>"; }).join("")+'</select></div>' +
+    '<div class="field"><label>Date</label><input id="fqDate" type="date" value="'+todayISO()+'" /></div>' +
+    '<div class="field"><label>Duration (minutes)</label><input id="fqDur" type="number" value="15" min="1" /></div></div>' +
+    '<div id="fqQuestions"></div><button class="btn sm" onclick="addCreatorQuestionTo(\'fqQuestions\')">+ Add question</button>' +
+    '<div class="row" style="margin-top:1.1rem"><button class="btn primary" onclick="publishFacultyQuiz()">Publish quiz to students</button></div></div>' +
+    '<div class="card mt"><h3>Published by Faculty</h3>' + facultyQuizListHTML() + "</div>";
+  return h;
+};
+RENDER["f-quiz_init"] = function(){ addCreatorQuestionTo("fqQuestions"); };
+function facultyQuizListHTML(){
+  var list = DB.quizzes.filter(function(q){ return q.facultyMade; });
+  if(!list.length) return '<p class="muted small" style="margin-top:.5rem">No faculty quizzes published yet in this demo.</p>';
+  return list.map(function(q){
+    return '<div class="class-row"><div style="flex:1"><b>'+esc(q.title)+'</b><br/><span class="muted small">'+esc(courseById(q.courseId).name)+' · '+fmtDate(q.date)+' · '+q.nq+' questions · Status for student: '+q.status+'</span></div></div>';
+  }).join("");
+}
+function addCreatorQuestionTo(wrapId){
+  var wrap = $(wrapId), n = wrap.children.length;
+  var div = document.createElement("div");
+  div.className = "month-blk"; div.style.marginTop = ".8rem";
+  div.innerHTML = '<b class="small">Question '+(n+1)+'</b>' +
+    '<div class="field" style="margin-top:.5rem"><label>Question</label><input class="cq-q" placeholder="Type the question" /></div>' +
+    '<div class="grid g2">' + [0,1,2,3].map(function(i){ return '<div class="field"><label>Option '+"ABCD"[i]+'</label><input class="cq-o'+i+'" placeholder="Option '+"ABCD"[i]+'" /></div>'; }).join("") + "</div>" +
+    '<div class="grid g2"><div class="field"><label>Correct option</label><select class="cq-a"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></div>' +
+    '<div class="field"><label>Explanation</label><input class="cq-w" placeholder="Shown to students in review" /></div></div>';
+  wrap.appendChild(div);
+}
+function collectQuestions(wrapId){
+  var qs = [];
+  Array.prototype.forEach.call($(wrapId).children, function(blk){
+    var q = blk.querySelector(".cq-q").value.trim(); if(!q) return;
+    qs.push({ q:q, opts:[0,1,2,3].map(function(i){ return blk.querySelector(".cq-o"+i).value.trim() || ("Option "+"ABCD"[i]); }),
+      ans: parseInt(blk.querySelector(".cq-a").value,10), why: blk.querySelector(".cq-w").value.trim() });
+  });
+  return qs;
+}
+function publishFacultyQuiz(){
+  var title = $("fqTitle").value.trim(); if(!title) return toast("Give the quiz a title.");
+  var qs = collectQuestions("fqQuestions"); if(!qs.length) return toast("Add at least one question.");
+  DB.quizzes.push({ id:"fac-"+Date.now(), courseId:$("fqCourse").value, title:title, date:$("fqDate").value || todayISO(),
+    window:"10:00–10:15 AM", marks:qs.length, nq:qs.length, dur: Math.max(1, parseInt($("fqDur").value,10)||15),
+    status:"Pending", questions:qs, facultyMade:true });
+  save(); go("f-quiz"); toast("Quiz published — students can attempt it now.");
+}
+RENDER["f-notice"] = function(){
+  return '<div class="page-head"><h1>Post a Notice</h1><p>Appears instantly on every student\'s notice board</p></div>' +
+    '<div class="card"><div class="field"><label>Title</label><input id="fnTitle" placeholder="e.g. Unit Test 3 Schedule" /></div>' +
+    '<div class="grid g2"><div class="field"><label>Category</label><select id="fnCat"><option>Academic</option><option>AMS Notice</option><option>Event</option><option>Examination</option><option>General Notice</option><option>Scholarship</option></select></div>' +
+    '<div class="field"><label>Expires</label><input id="fnExp" type="date" value="2026-12-21" /></div></div>' +
+    '<div class="field"><label>Notice text</label><textarea class="ta" id="fnBody"></textarea></div>' +
+    '<button class="btn primary" onclick="publishNotice()">Publish notice</button></div>' +
+    '<div class="card mt"><h3>Notices Posted via This Console</h3>' +
+    (DB.notices.filter(function(n){ return n.facultyMade; }).length ? DB.notices.filter(function(n){ return n.facultyMade; }).map(function(n){ return '<div class="class-row"><div><b>'+esc(n.title)+'</b><br/><span class="muted small">'+esc(n.cat)+' · '+fmtDate(n.date)+'</span></div></div>'; }).join("") : '<p class="muted small" style="margin-top:.5rem">None yet.</p>') + "</div>";
+};
+function publishNotice(){
+  var t = $("fnTitle").value.trim(); if(!t) return toast("Add a title.");
+  DB.notices.unshift({ id:"fac-n-"+Date.now(), title:t, cat:$("fnCat").value, by:FACULTY_DEMO.name, date: todayISO(),
+    expires: ($("fnExp").value || "2026-12-21") + "T23:59", audience:["All Students"], body: $("fnBody").value.trim() || t, pdf:"Notice.pdf", facultyMade:true });
+  save(); go("f-notice"); toast("Notice published to the student notice board.");
+}
+RENDER["f-material"] = function(){
+  return '<div class="page-head"><h1>Course Materials</h1><p>Upload material into a course — it appears in that course\'s Materials tab for students</p></div>' +
+    '<div class="card"><div class="grid g2"><div class="field"><label>Course</label><select id="fmCourse">'+DB.courses.map(function(c){ return '<option value="'+c.id+'"'+(c.id==="ic"?" selected":"")+">"+esc(c.name)+"</option>"; }).join("")+'</select></div>' +
+    '<div class="field"><label>File name</label><input id="fmName" placeholder="e.g. Unit 4 — Networks (Slides)" /></div></div>' +
+    '<div class="field"><label>File description / size</label><input id="fmType" placeholder="PDF · 1.8 MB" value="PDF" /></div>' +
+    '<button class="btn primary" onclick="publishMaterial()">Add to course materials</button></div>' +
+    '<div class="card mt"><h3>Introduction to Computing — Current Materials</h3>' + courseById("ic").materials.map(function(m){ return '<div class="class-row"><div><b>'+esc(m.name)+'</b><br/><span class="muted small">'+esc(m.type)+"</span></div></div>"; }).join("") + "</div>";
+};
+function publishMaterial(){
+  var n = $("fmName").value.trim(); if(!n) return toast("Add a file name.");
+  courseById($("fmCourse").value).materials.push({name:n, type:$("fmType").value.trim() || "PDF"});
+  save(); go("f-material"); toast("Material added — visible in the student's course page.");
+}
+RENDER["f-results"] = function(){
+  return '<div class="page-head"><h1>Publish Results</h1><p>Marks flow into the course Marks tab, Academics and the student\'s marks tracker</p></div>' +
+    '<div class="card"><div class="grid g2"><div class="field"><label>Course</label><select id="frCourse">'+DB.courses.map(function(c){ return '<option value="'+c.id+'"'+(c.id==="ic"?" selected":"")+">"+esc(c.name)+"</option>"; }).join("")+'</select></div>' +
+    '<div class="field"><label>Exam name</label><input id="frExam" placeholder="e.g. Mid-Semester Examination" /></div>' +
+    '<div class="field"><label>Sanidhya\'s score</label><input id="frScore" type="number" placeholder="e.g. 34" /></div>' +
+    '<div class="field"><label>Maximum marks</label><input id="frMax" type="number" placeholder="e.g. 50" value="50" /></div>' +
+    '<div class="field"><label>Class average (%)</label><input id="frAvg" type="number" placeholder="e.g. 58" /></div></div>' +
+    '<div class="row"><button class="btn primary" onclick="publishResult()">Publish result</button>' +
+    '<label class="small row" style="gap:.4rem"><input type="checkbox" id="frPublishSem" style="width:18px;height:18px;accent-color:var(--moss)" /> Also publish as Semester 1 result in Academics</label></div></div>';
+};
+function publishResult(){
+  var exam = $("frExam").value.trim(), score = parseFloat($("frScore").value), max = parseFloat($("frMax").value);
+  if(!exam || isNaN(score) || !(max>0)) return toast("Fill exam name, score and maximum marks.");
+  courseById($("frCourse").value).marks.push({exam:exam, score:score, max:max, avg: parseFloat($("frAvg").value) || 0, status:"Published"});
+  if($("frPublishSem").checked) DB.resultsPublished = true;
+  save(); toast("Result published — check the student view to see it live.");
+  go("f-results");
+}
+</script>
+</body>
+</html>
